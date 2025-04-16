@@ -1,0 +1,230 @@
+[
+  {
+    "type": "function",
+    "name": "addIntentWithSignatureAndExecute",
+    "inputs": [
+      { "name": "user", "type": "address", "internalType": "address" },
+      { "name": "dispatcher", "type": "address", "internalType": "address" },
+      { "name": "params", "type": "bytes", "internalType": "bytes" },
+      { "name": "signature", "type": "bytes", "internalType": "bytes" },
+      {
+        "name": "executions",
+        "type": "tuple[]",
+        "internalType": "struct Execution[]",
+        "components": [
+          { "name": "target", "type": "address", "internalType": "address" },
+          { "name": "value", "type": "uint256", "internalType": "uint256" },
+          { "name": "callData", "type": "bytes", "internalType": "bytes" }
+        ]
+      },
+      {
+        "name": "callType",
+        "type": "uint8",
+        "internalType": "enum Enum.Operation"
+      },
+      {
+        "name": "intermediaryApprovals",
+        "type": "tuple[]",
+        "internalType": "struct IntentRegistry.Approval[]",
+        "components": [
+          {
+            "name": "tokenAddress",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "spenderAddress",
+            "type": "address",
+            "internalType": "address"
+          },
+          { "name": "amount", "type": "uint256", "internalType": "uint256" },
+          { "name": "chainId", "type": "uint256", "internalType": "uint256" }
+        ]
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "approvalsMapping",
+    "inputs": [
+      { "name": "", "type": "address", "internalType": "address" },
+      { "name": "", "type": "uint256", "internalType": "uint256" },
+      { "name": "", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "executeEscrowTransfer",
+    "inputs": [
+      { "name": "user", "type": "address", "internalType": "address" },
+      { "name": "intentIndex", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "success", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "executeIntent",
+    "inputs": [
+      { "name": "user", "type": "address", "internalType": "address" },
+      { "name": "_nonce", "type": "uint256", "internalType": "uint256" },
+      { "name": "dispatcher", "type": "address", "internalType": "address" },
+      {
+        "name": "executions",
+        "type": "tuple[]",
+        "internalType": "struct Execution[]",
+        "components": [
+          { "name": "target", "type": "address", "internalType": "address" },
+          { "name": "value", "type": "uint256", "internalType": "uint256" },
+          { "name": "callData", "type": "bytes", "internalType": "bytes" }
+        ]
+      },
+      {
+        "name": "callType",
+        "type": "uint8",
+        "internalType": "enum Enum.Operation"
+      },
+      {
+        "name": "intermediaryApprovals",
+        "type": "tuple[]",
+        "internalType": "struct IntentRegistry.Approval[]",
+        "components": [
+          {
+            "name": "tokenAddress",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "spenderAddress",
+            "type": "address",
+            "internalType": "address"
+          },
+          { "name": "amount", "type": "uint256", "internalType": "uint256" },
+          { "name": "chainId", "type": "uint256", "internalType": "uint256" }
+        ]
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "intentRegistry",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "isInitialized",
+    "inputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "isModuleType",
+    "inputs": [
+      { "name": "typeID", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "pure"
+  },
+  {
+    "type": "function",
+    "name": "onInstall",
+    "inputs": [{ "name": "data", "type": "bytes", "internalType": "bytes" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "onUninstall",
+    "inputs": [{ "name": "data", "type": "bytes", "internalType": "bytes" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setIntentRegistry",
+    "inputs": [
+      {
+        "name": "_intentRegistry",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "userApprovalsMapping",
+    "inputs": [
+      { "name": "", "type": "address", "internalType": "address" },
+      { "name": "", "type": "uint256", "internalType": "uint256" },
+      { "name": "", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "verifySignature",
+    "inputs": [
+      { "name": "sender", "type": "address", "internalType": "address" },
+      { "name": "data", "type": "bytes", "internalType": "bytes" },
+      { "name": "signature", "type": "bytes", "internalType": "bytes" }
+    ],
+    "outputs": [],
+    "stateMutability": "view"
+  },
+  {
+    "type": "event",
+    "name": "TaskCompleted",
+    "inputs": [
+      {
+        "name": "user",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "intentIndex",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "solver",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "AlreadyInitialized",
+    "inputs": [
+      { "name": "smartAccount", "type": "address", "internalType": "address" }
+    ]
+  },
+  { "type": "error", "name": "BalanceDecreasedAfterExecution", "inputs": [] },
+  { "type": "error", "name": "DeadlinePassed", "inputs": [] },
+  { "type": "error", "name": "NotAllowedToExecuteIntent", "inputs": [] },
+  { "type": "error", "name": "NotAllowedToUseToken", "inputs": [] },
+  {
+    "type": "error",
+    "name": "NotInitialized",
+    "inputs": [
+      { "name": "smartAccount", "type": "address", "internalType": "address" }
+    ]
+  },
+  { "type": "error", "name": "TaskCompleted", "inputs": [] }
+]
