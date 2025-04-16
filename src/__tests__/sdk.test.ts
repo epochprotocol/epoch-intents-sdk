@@ -1,4 +1,4 @@
-import { EpochIntent } from "../";
+import { EpochIntents } from "../";
 import { ethers } from "ethers";
 import axios from "axios";
 import { RPC_ENDPOINTS } from "../constants";
@@ -12,7 +12,7 @@ jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("EpochIntent", () => {
-  let sdk: ReturnType<typeof EpochIntent>;
+  let sdk: ReturnType<typeof EpochIntents>;
   let mockSigner: ethers.Signer;
 
   const mockIntent = {
@@ -33,7 +33,7 @@ describe("EpochIntent", () => {
   };
 
   beforeEach(async () => {
-    sdk = EpochIntent({
+    sdk = EpochIntents({
       apiUrl: "http://localhost:8080",
     });
 
