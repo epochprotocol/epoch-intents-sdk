@@ -5,7 +5,7 @@ import { RPC_ENDPOINTS } from "../constants";
 import {
   getEIP191IntentHashFromRegistry,
   validateSignatureFromRegistry,
-} from "../web3";
+} from "../web3/registry";
 import { encodeBase64 } from "../utils";
 // Mock axios
 jest.mock("axios");
@@ -180,4 +180,12 @@ describe("EpochIntent", () => {
       expect(result.transactionHash).toBe("0x123");
     });
   });
+
+  // describe("createWallet", () => {
+  //   it("should create a wallet", async () => {
+  //     const userAddress = await mockSigner.getAddress();
+  //     const wallet = await sdk.createWallet(userAddress, mockSigner);
+  //     console.log("wallet: ", wallet);
+  //   }, 10000000);
+  // });
 });

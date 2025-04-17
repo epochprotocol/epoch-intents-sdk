@@ -1,24 +1,24 @@
-export interface ApiResponse<T> {
+export type ApiResponse<T> = {
   data: T;
   status: number;
   message?: string;
-}
+};
 
-export interface BlockchainData {
+export type BlockchainData = {
   balance: bigint;
   // Add more blockchain data types as needed
-}
+};
 
-export interface ContractInteraction {
+export type ContractInteraction = {
   address: string;
   functionName: string;
   args: any[];
   // Add more contract interaction types as needed
-}
+};
 
-export interface Config {
+export type Config = {
   apiUrl: string;
-}
+};
 
 export type Approval = {
   tokenAddress: string;
@@ -56,22 +56,28 @@ export type Intent = {
   signature?: string;
 };
 
-export interface Task {
+export type Task = {
   action: string;
   tokens: string[][];
   chainIds: number[][];
   protocol?: string;
-}
+};
 
-export interface NonceResponse {
+export type NonceResponse = {
   nonce: string;
-}
+};
 
-export interface SolveIntentResponse {
+export type SolveIntentResponse = {
   success: boolean;
   transactionHash: string;
-}
+};
 
-export interface ErrorResponse {
+export type ErrorResponse = {
   error: string;
-}
+};
+
+export type Transaction = {
+  target: string;
+  data: string;
+  value: string;
+};

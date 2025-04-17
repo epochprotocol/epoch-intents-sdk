@@ -6,9 +6,11 @@ import {
   SolveIntentResponse,
   Task,
 } from "./types";
-import { Signer, VoidSigner } from "ethers";
-import { getEIP191IntentHash, getEncodedIntent, getIntentHash } from "./web3";
+import { ethers } from "ethers";
+import { getEIP191IntentHash, getIntentHash } from "./web3/intents";
 import { encodeBase64 } from "./utils";
+import { getCreateWalletData } from "./web3/wallet";
+import { executeTransaction } from "./web3";
 
 /**
  * Creates a new SDK instance with the given configuration
@@ -20,6 +22,40 @@ export const EpochIntents = (config: Config) => {
      */
     encodeTask: (task: Task): string => {
       return encodeBase64(task);
+    },
+
+    createWallet: async (
+      userAddress: string,
+      relayer: ethers.VoidSigner | ethers.Signer
+    ): Promise<string> => {
+      const data = await getCreateWalletData(userAddress);
+      const txnReceipt = await executeTransaction(data, relayer);
+
+      const proxyCreationEvent = `event ProxyCreation(address indexed proxy, address singleton)`;
+      const proxyCreationEventAbi = new ethers.utils.Interface([
+        proxyCreationEvent,
+      ]);
+
+      let proxyAddress;
+      for (const log of txnReceipt.logs) {
+        try {
+          const parsedLog = proxyCreationEventAbi.parseLog(log);
+          if (parsedLog && parsedLog.name === "ProxyCreation") {
+            proxyAddress = parsedLog.args.proxy;
+            break;
+          }
+        } catch (e) {
+          continue;
+        }
+      }
+
+      if (!proxyAddress) {
+        throw new Error(
+          "Could not find ProxyCreation event in transaction logs"
+        );
+      }
+
+      return proxyAddress;
     },
 
     /**
@@ -96,7 +132,7 @@ export const EpochIntents = (config: Config) => {
      */
     signIntent: async (
       intent: Intent,
-      signer: VoidSigner | Signer
+      signer: ethers.VoidSigner | ethers.Signer
     ): Promise<string> => {
       if (!signer) {
         throw new Error("Signer not provided");
