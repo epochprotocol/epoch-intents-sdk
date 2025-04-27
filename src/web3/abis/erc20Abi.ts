@@ -1,4 +1,4 @@
-[
+export default `[
     {
         "constant": true,
         "inputs": [],
@@ -219,4 +219,4 @@
         "name": "Transfer",
         "type": "event"
     }
-]
+]`;

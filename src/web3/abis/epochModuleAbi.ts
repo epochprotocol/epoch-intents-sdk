@@ -1,4 +1,4 @@
-[
+export default `[
   {
     "type": "function",
     "name": "addIntentWithSignatureAndExecute",
@@ -228,3 +228,4 @@
   },
   { "type": "error", "name": "TaskCompleted", "inputs": [] }
 ]
+`;

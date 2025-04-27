@@ -1,4 +1,4 @@
-[
+export default `[
   {
     "type": "constructor",
     "inputs": [
@@ -920,4 +920,4 @@
       { "name": "account", "type": "address", "internalType": "address" }
     ]
   }
-]
+]`;

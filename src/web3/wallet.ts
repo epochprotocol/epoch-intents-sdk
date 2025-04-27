@@ -1,30 +1,86 @@
-import { Transaction } from "../types";
+import { ethers } from "ethers";
 import {
-  DEFAULT_CHAIN_ID,
+  createPublicClient,
+  createWalletClient,
+  extractChain,
+  http,
+  PrivateKeyAccount,
+  WalletClient,
+} from "viem";
+import { SignAuthorizationReturnType } from "viem/_types/accounts/utils/signAuthorization";
+import { privateKeyToAccount } from "viem/accounts";
+import * as chains from "viem/chains";
+
+import {
+  EIP7702_SAFE_PROXY_ADDRESS,
   EPOCH_MODULE_SAFE_ADDRESS,
   EPOCH_MODULE_SETUP,
   RPC_ENDPOINTS,
   SAFE_7579_MODULE_ADDRESS,
   SAFE_7579_REGISTRY_ADDRESS,
+  SAFE_7702_SINGLETON_ADDRESS,
   SAFE_PROXY_FACTORY_ADDRESS,
   SAFE_SINGLETON_ADDRESS,
-  ZERO_ADDRESS,
-} from "@/constants";
-import safeProxyFactoryAbi from "@/web3/abis/safeProxyFactory.json";
-import { ethers } from "ethers";
+} from "../constants";
+import {
+  getAuthorizationList,
+  getSignedTransaction,
+  isAccountDelegatedToAddress,
+} from "../utils/web3";
+import {
+  AuthorizationListEntryAny,
+  CreateWalletData,
+  CreateWalletOptions,
+} from "../types";
+import { getProvider } from "../web3";
 
-export const getSafeProxyFactoryInstance = (chainId: number) => {
+import safe7702ProxyFactoryAbi from "./abis/safe7702ProxyFactoryAbi";
+import safeProxyFactoryAbi from "./abis/safeProxyFactoryAbi";
+
+export const getSafeProxyFactoryInstance = (
+  chainId: number,
+  is7702?: boolean
+) => {
   const provider = new ethers.providers.JsonRpcProvider(RPC_ENDPOINTS[chainId]);
   return new ethers.Contract(
-    SAFE_PROXY_FACTORY_ADDRESS[chainId],
-    safeProxyFactoryAbi,
+    is7702
+      ? EIP7702_SAFE_PROXY_ADDRESS[chainId]
+      : SAFE_PROXY_FACTORY_ADDRESS[chainId],
+    is7702 ? safe7702ProxyFactoryAbi : safeProxyFactoryAbi,
     provider
   );
 };
 
+export const calculateProxyAddress = async (
+  factory: ethers.Contract,
+  singleton: string,
+  inititalizer: string,
+  nonce: number | string
+) => {
+  const salt = ethers.utils.solidityKeccak256(
+    ["bytes32", "uint256"],
+    [ethers.utils.solidityKeccak256(["bytes"], [inititalizer]), nonce]
+  );
+  const factoryAddress = factory.address;
+  const proxyCreationCode = await factory.proxyCreationCode();
+
+  const deploymentCode = ethers.utils.solidityPack(
+    ["bytes", "uint256", "uint256"],
+    [proxyCreationCode, ethers.utils.keccak256(inititalizer), singleton]
+  );
+  return ethers.utils.getCreate2Address(
+    factoryAddress,
+    salt,
+    ethers.utils.keccak256(deploymentCode)
+  );
+};
+
 export const getCreateWalletData = async (
-  userAddress: string
-): Promise<Transaction> => {
+  userAddress: string,
+  chainId: number,
+  options?: CreateWalletOptions
+): Promise<CreateWalletData> => {
+  const { is7702 } = { ...options };
   const abiCoder = new ethers.utils.AbiCoder();
 
   const safeOwners = [userAddress];
@@ -44,7 +100,7 @@ export const getCreateWalletData = async (
       [],
       [],
       {
-        registry: SAFE_7579_REGISTRY_ADDRESS[DEFAULT_CHAIN_ID],
+        registry: SAFE_7579_REGISTRY_ADDRESS[chainId],
         attesters: [],
         threshold: 0,
       },
@@ -59,10 +115,10 @@ export const getCreateWalletData = async (
   const safeModuleSetupData = safeModuleSetupInterface.encodeFunctionData(
     "enableModules",
     [
-      SAFE_7579_MODULE_ADDRESS[DEFAULT_CHAIN_ID],
-      SAFE_7579_MODULE_ADDRESS[DEFAULT_CHAIN_ID],
+      SAFE_7579_MODULE_ADDRESS[chainId],
+      SAFE_7579_MODULE_ADDRESS[chainId],
       erc7579Data,
-      EPOCH_MODULE_SAFE_ADDRESS[DEFAULT_CHAIN_ID],
+      EPOCH_MODULE_SAFE_ADDRESS[chainId],
     ]
   );
 
@@ -73,28 +129,279 @@ export const getCreateWalletData = async (
   const initializerData = safeSetupInterface.encodeFunctionData("setup", [
     safeOwners,
     1,
-    EPOCH_MODULE_SETUP[DEFAULT_CHAIN_ID],
+    EPOCH_MODULE_SETUP[chainId],
     safeModuleSetupData,
-    ZERO_ADDRESS,
-    ZERO_ADDRESS,
+    ethers.constants.AddressZero,
+    ethers.constants.AddressZero,
     0,
-    ZERO_ADDRESS,
+    ethers.constants.AddressZero,
   ]);
 
-  const proxyFactory = getSafeProxyFactoryInstance(DEFAULT_CHAIN_ID);
-  const proxyData = await proxyFactory.populateTransaction.createProxyWithNonce(
-    SAFE_SINGLETON_ADDRESS[DEFAULT_CHAIN_ID],
+  const safeEIP7702ProxyFactory = getSafeProxyFactoryInstance(chainId, true);
+  const proxyFactory = getSafeProxyFactoryInstance(chainId);
+
+  const proxyAddress = await calculateProxyAddress(
+    is7702 ? safeEIP7702ProxyFactory : proxyFactory,
+    is7702
+      ? SAFE_7702_SINGLETON_ADDRESS[chainId]
+      : SAFE_SINGLETON_ADDRESS[chainId],
     initializerData,
-    salt
+    0
   );
 
-  if (!proxyData.data) {
-    throw new Error("Failed to create proxy data");
+  const provider = getProvider(chainId);
+  const isContract = await provider.getCode(proxyAddress);
+  if (isContract !== "0x") {
+    return {
+      txnData: {
+        target: "",
+        data: "",
+        value: "0",
+      },
+      proxyAddress,
+      initializerData,
+      isAlreadyDeployed: true,
+    };
   }
 
-  return {
-    target: proxyFactory.address,
-    data: proxyData.data,
-    value: "0",
-  };
+  if (is7702) {
+    const proxyData =
+      await safeEIP7702ProxyFactory.populateTransaction.createProxyWithNonce(
+        SAFE_7702_SINGLETON_ADDRESS[chainId],
+        initializerData,
+        0
+      );
+
+    if (!proxyData.data) {
+      throw new Error("Failed to create proxy data");
+    }
+
+    return {
+      txnData: {
+        target: safeEIP7702ProxyFactory.address,
+        data: proxyData.data,
+        value: "0",
+      },
+      proxyAddress,
+      initializerData,
+      isAlreadyDeployed: false,
+    };
+  } else {
+    const proxyData =
+      await proxyFactory.populateTransaction.createProxyWithNonce(
+        SAFE_SINGLETON_ADDRESS[chainId],
+        initializerData,
+        salt
+      );
+
+    if (!proxyData.data) {
+      throw new Error("Failed to create proxy data");
+    }
+
+    return {
+      txnData: {
+        target: proxyFactory.address,
+        data: proxyData.data,
+        value: "0",
+      },
+      proxyAddress,
+      initializerData,
+      isAlreadyDeployed: false,
+    };
+  }
+};
+
+export const set7702Delegator = async (
+  chainId: number,
+  userAddress: string,
+  userSafeAddress: string,
+  initializerData: string,
+  userWalletClient: WalletClient,
+  relayer: ethers.utils.SigningKey
+) => {
+  const publicClient = createPublicClient({
+    transport: http(RPC_ENDPOINTS[chainId]),
+  });
+
+  const account = userWalletClient.account;
+  if (!account) {
+    throw new Error("Account not found");
+  }
+  const transactionCount = await publicClient.getTransactionCount({
+    address: account.address,
+  });
+  const relayerAddress = ethers.utils.computeAddress(relayer.publicKey);
+
+  let authorizationList;
+  if (account.address === relayerAddress) {
+    authorizationList = await userWalletClient.signAuthorization({
+      account: account as PrivateKeyAccount,
+      contractAddress: userSafeAddress as `0x${string}`,
+      chainId: chainId,
+      executor: "self",
+    });
+  } else {
+    authorizationList = await userWalletClient.signAuthorization({
+      account: account as PrivateKeyAccount,
+      contractAddress: userSafeAddress as `0x${string}`,
+      nonce: transactionCount,
+      chainId: chainId,
+    });
+  }
+  if (!authorizationList) {
+    throw new Error("Failed to sign authorization for 7702 delegator");
+  }
+
+  await set7702DelegatorFromAuthorizationList(
+    chainId,
+    userAddress,
+    authorizationList,
+    initializerData,
+    relayer
+  );
+};
+
+export const set7702DelegatorFromAuthorizationList = async (
+  chainId: number,
+  userAddress: string,
+  authorizationList: SignAuthorizationReturnType | AuthorizationListEntryAny[],
+  initializerData: string,
+  relayer: ethers.utils.SigningKey
+) => {
+  const chain = extractChain({
+    chains: Object.values(chains),
+    id: chainId as any,
+  });
+  const account = privateKeyToAccount(relayer.privateKey as `0x${string}`);
+
+  const publicClient = createPublicClient({
+    transport: http(RPC_ENDPOINTS[chainId]),
+    chain,
+  });
+  const relayerWalletClient = createWalletClient({
+    account,
+    transport: http(RPC_ENDPOINTS[chainId]),
+    chain,
+  });
+
+  const hash = await relayerWalletClient.sendTransaction({
+    account,
+    chain: chain as chains.Chain,
+    to: userAddress as `0x${string}`,
+    data: initializerData as `0x${string}`,
+    value: BigInt(0),
+    authorizationList: [authorizationList as SignAuthorizationReturnType],
+  });
+  const receipt = await publicClient.waitForTransactionReceipt({
+    hash: hash as `0x${string}`,
+  });
+
+  if (receipt.status !== "success") {
+    throw new Error("Failed to set 7702 delegator");
+  }
+};
+
+export const set7702DelegatorManually = async (
+  chainId: number,
+  userAddress: string,
+  userSafeAddress: string,
+  userSigner: ethers.Signer | ethers.Wallet | ethers.VoidSigner,
+  relayer: ethers.utils.SigningKey,
+  initializerData: string
+) => {
+  const provider = getProvider(chainId);
+  const authNonce = await provider.getTransactionCount(userAddress, "pending");
+
+  const authAddress = userSafeAddress;
+
+  const authorizationList = await getAuthorizationList(
+    chainId,
+    ethers.BigNumber.from(authNonce),
+    authAddress,
+    userSigner
+  );
+
+  await set7702DelegatorFromAuthorizationListManually(
+    chainId,
+    userAddress,
+    userSafeAddress,
+    authorizationList,
+    initializerData,
+    relayer
+  );
+
+  return true;
+};
+
+export const set7702DelegatorFromAuthorizationListManually = async (
+  chainId: number,
+  userAddress: string,
+  userSafeAddress: string,
+  authorizationList: SignAuthorizationReturnType | AuthorizationListEntryAny[],
+  initializerData: string,
+  relayer: ethers.utils.SigningKey
+) => {
+  try {
+    const provider = getProvider(chainId);
+    const encodedSignedTx = await getSignedTransaction(
+      provider,
+      relayer,
+      authorizationList
+    );
+    const authAddress = userSafeAddress;
+
+    const isAlreadyDelegated = await isAccountDelegatedToAddress(
+      provider,
+      userAddress,
+      authAddress
+    );
+    if (
+      isAlreadyDelegated &&
+      (await provider.getStorageAt(userAddress, 4)) ==
+        ethers.utils.hexZeroPad("0x01", 32)
+    ) {
+      throw new Error(
+        "Account already delegated to Safe Proxy and storage is setup. Returning"
+      );
+    }
+
+    const response = await provider.send("eth_sendRawTransaction", [
+      encodedSignedTx,
+    ]);
+    await (await provider.getTransaction(response))?.wait();
+
+    const relayerWallet = new ethers.Wallet(relayer.privateKey, provider);
+
+    const setupTxResponse = await relayerWallet.sendTransaction({
+      to: userAddress,
+      data: initializerData,
+    });
+    await setupTxResponse.wait();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProxyAddressFromReceipt = (
+  txnReceipt: ethers.providers.TransactionReceipt
+) => {
+  const proxyCreationEvent = `event ProxyCreation(address indexed proxy, address singleton)`;
+  const proxyCreationEventAbi = new ethers.utils.Interface([
+    proxyCreationEvent,
+  ]);
+
+  let proxyAddress;
+  for (const log of txnReceipt.logs) {
+    try {
+      const parsedLog = proxyCreationEventAbi.parseLog(log);
+      if (parsedLog && parsedLog.name === "ProxyCreation") {
+        proxyAddress = parsedLog.args.proxy;
+        break;
+      }
+    } catch (e) {
+      continue;
+    }
+  }
+
+  return proxyAddress;
 };

@@ -1,16 +1,20 @@
 import axios from "axios";
+import { ethers } from "ethers";
+import { WalletClient } from "viem";
+
 import {
+  Calldata,
   Config,
+  CreateWalletOptions,
   Intent,
   NonceResponse,
   SolveIntentResponse,
   Task,
 } from "./types";
-import { ethers } from "ethers";
-import { getEIP191IntentHash, getIntentHash } from "./web3/intents";
 import { encodeBase64 } from "./utils";
-import { getCreateWalletData } from "./web3/wallet";
-import { executeTransaction } from "./web3";
+import { executeTransaction, getProvider } from "./web3";
+import { getEIP191IntentHash, getIntentHash } from "./web3/intents";
+import { getCreateWalletData, set7702Delegator } from "./web3/wallet";
 
 /**
  * Creates a new SDK instance with the given configuration
@@ -26,33 +30,75 @@ export const EpochIntents = (config: Config) => {
 
     createWallet: async (
       userAddress: string,
-      relayer: ethers.VoidSigner | ethers.Signer
+      chainId: number,
+      relayer:
+        | ethers.utils.SigningKey
+        | ethers.VoidSigner
+        | ethers.Signer
+        | WalletClient,
+      options?: CreateWalletOptions
     ): Promise<string> => {
-      const data = await getCreateWalletData(userAddress);
-      const txnReceipt = await executeTransaction(data, relayer);
-
-      const proxyCreationEvent = `event ProxyCreation(address indexed proxy, address singleton)`;
-      const proxyCreationEventAbi = new ethers.utils.Interface([
-        proxyCreationEvent,
-      ]);
-
-      let proxyAddress;
-      for (const log of txnReceipt.logs) {
-        try {
-          const parsedLog = proxyCreationEventAbi.parseLog(log);
-          if (parsedLog && parsedLog.name === "ProxyCreation") {
-            proxyAddress = parsedLog.args.proxy;
-            break;
-          }
-        } catch (e) {
-          continue;
+      if (options?.is7702) {
+        if (
+          options.userSigner instanceof ethers.VoidSigner ||
+          options.userSigner instanceof ethers.Signer
+        ) {
+          throw new Error(
+            "User signer must be an WalletClient, ethers Signer not supported at the moment for 7702"
+          );
+        }
+        if (!(relayer instanceof ethers.utils.SigningKey)) {
+          throw new Error(
+            "Relayer must be an SigningKey, ethers Signer not supported at the moment for 7702"
+          );
         }
       }
 
+      const { txnData, proxyAddress, initializerData, isAlreadyDeployed } =
+        await getCreateWalletData(userAddress, chainId, options);
       if (!proxyAddress) {
-        throw new Error(
-          "Could not find ProxyCreation event in transaction logs"
+        throw new Error("Could not deploy proxy.");
+      }
+
+      if (!isAlreadyDeployed) {
+        let relayerSigner = relayer;
+        if (relayer instanceof ethers.utils.SigningKey) {
+          relayerSigner = new ethers.Wallet(
+            relayer.privateKey,
+            getProvider(chainId)
+          );
+        }
+        await executeTransaction(
+          txnData,
+          relayerSigner as ethers.Signer | ethers.VoidSigner | WalletClient
         );
+      }
+
+      if (options?.is7702 && options?.userSigner) {
+        await set7702Delegator(
+          chainId,
+          userAddress,
+          proxyAddress,
+          initializerData,
+          options.userSigner as WalletClient,
+          relayer as ethers.utils.SigningKey
+        );
+      }
+
+      return proxyAddress;
+    },
+
+    getUserSCWalletAddress: async (
+      userAddress: string,
+      chainId: number,
+      is7702?: boolean
+    ): Promise<string> => {
+      const { proxyAddress } = await getCreateWalletData(userAddress, chainId, {
+        is7702,
+      });
+
+      if (!proxyAddress) {
+        throw new Error("Could not deploy proxy.");
       }
 
       return proxyAddress;
@@ -65,7 +111,7 @@ export const EpochIntents = (config: Config) => {
       try {
         const response = await axios.post<NonceResponse>(
           `${config.apiUrl}/getNonce`,
-          intent
+          { ...intent }
         );
         return response.data.nonce;
       } catch (error: unknown) {
@@ -83,7 +129,7 @@ export const EpochIntents = (config: Config) => {
       try {
         const response = await axios.post<SolveIntentResponse>(
           `${config.apiUrl}/solveIntent`,
-          intent
+          { ...intent }
         );
         return response.data;
       } catch (error: unknown) {
@@ -101,9 +147,14 @@ export const EpochIntents = (config: Config) => {
       sender: string,
       task: Task,
       approvals: Intent["approvals"],
-      nonce?: string
+      nonce?: string,
+      calldatas?: Calldata[]
     ): Intent => {
-      const chainIds: number[] = [];
+      let chainIds: number[] = [];
+      approvals.forEach((approval) => {
+        chainIds.push(approval.chainId);
+      });
+
       const constraint: Intent["constraint"] = {
         constraintData: "0x",
         constraintResponse: "0x",
@@ -123,7 +174,7 @@ export const EpochIntents = (config: Config) => {
         proposedFeeRewards: 0,
         recurring: false,
         chainIds,
-        calldatas: [],
+        calldatas: calldatas || [],
       };
     },
 
@@ -132,7 +183,7 @@ export const EpochIntents = (config: Config) => {
      */
     signIntent: async (
       intent: Intent,
-      signer: ethers.VoidSigner | ethers.Signer
+      signer: ethers.VoidSigner | ethers.Signer | WalletClient
     ): Promise<string> => {
       if (!signer) {
         throw new Error("Signer not provided");
@@ -140,8 +191,24 @@ export const EpochIntents = (config: Config) => {
 
       try {
         const message = getEIP191IntentHash(intent);
-        const signature = await signer.signMessage(message);
-        return signature;
+
+        if (
+          signer instanceof ethers.VoidSigner ||
+          signer instanceof ethers.Signer
+        ) {
+          const signature = await signer.signMessage(message);
+          return signature;
+        } else {
+          const account = signer.account;
+          if (!account) {
+            throw new Error("WalletClient account not found");
+          }
+          const signature = await signer.signMessage({
+            message,
+            account,
+          });
+          return signature;
+        }
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(`Failed to sign intent: ${error.message}`);

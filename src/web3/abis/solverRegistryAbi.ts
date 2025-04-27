@@ -1,4 +1,4 @@
-[
+export default `[
     {
         "type": "function",
         "name": "addModule",
@@ -231,4 +231,4 @@
         ],
         "stateMutability": "view"
     }
-]
+]`;

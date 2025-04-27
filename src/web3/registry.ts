@@ -1,13 +1,15 @@
 import { ethers } from "ethers";
-import { Intent } from "../types";
+
 import {
   DEFAULT_CHAIN_ID,
   EPOCH_MODULE_SAFE_ADDRESS,
   INTENT_REGISTRY_ADDRESS,
   RPC_ENDPOINTS,
-} from "@/constants";
-import intentRegistryAbi from "@/web3/abis/intentRegistry.json";
+} from "../constants";
+import { Intent } from "../types";
 import { getEncodedIntent } from "./intents";
+
+import intentRegistryAbi from "./abis/intentRegistryAbi";
 
 export const getIntentRegistryInstance = (chainId: number) => {
   const provider = new ethers.providers.JsonRpcProvider(RPC_ENDPOINTS[chainId]);

@@ -1,4 +1,4 @@
-[
+export default `[
   {
     "type": "function",
     "name": "createChainSpecificProxyWithNonce",
@@ -136,4 +136,4 @@
     ],
     "anonymous": false
   }
-]
+]`;
