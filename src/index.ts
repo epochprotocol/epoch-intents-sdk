@@ -8,6 +8,7 @@ import {
   CreateWalletOptions,
   Intent,
   NonceResponse,
+  Path,
   SolveIntentResponse,
   Task,
 } from "./types";
@@ -137,6 +138,24 @@ export const EpochIntents = (config: Config) => {
           throw new Error(`Failed to submit intent: ${error.message}`);
         }
         throw new Error("Failed to submit intent: Unknown error");
+      }
+    },
+
+    /**
+     * Gets paths for an intent
+     */
+    getPathsForIntent: async (intent: Intent): Promise<Path[]> => {
+      try {
+        const response = await axios.post<Path[]>(
+          `${config.apiUrl}/findPathsForIntent`,
+          { ...intent }
+        );
+        return response.data;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(`Failed to get paths for intent: ${error.message}`);
+        }
+        throw new Error("Failed to get paths for intent: Unknown error");
       }
     },
 
