@@ -35,6 +35,7 @@ export type Task = {
   tokens?: string[][];
   chainIds?: number[][];
   protocol?: string;
+  recipient?: string;
 };
 
 export type NonceResponse = {

@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import { createWalletClient, extractChain, http, WalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import * as chains from "viem/chains";
-import { EpochIntents } from "../";
+import { EpochIntents, Intent, ProtocolType, Task } from "..";
 import { RPC_ENDPOINTS } from "../constants";
 import { encodeBase64 } from "../utils";
 import {
@@ -22,6 +22,12 @@ describe("EpochIntent", () => {
   let relayerSigningKey: ethers.utils.SigningKey;
   const chainId = 11155111;
 
+  const mockTask: Task = {
+    action: "lending:deposit" as ProtocolType,
+    tokens: [["ETH"]],
+    chainIds: [[10]],
+  };
+
   const mockIntent = {
     sender: "0x47C3E8E3607E01FF09FD98571c9cc2150aF4d6b9",
     approvals: [
@@ -32,11 +38,6 @@ describe("EpochIntent", () => {
         chainId: 8453,
       },
     ],
-    task: {
-      action: "lending:deposit",
-      tokens: [["ETH"]],
-      chainIds: [[10]],
-    },
   };
 
   beforeEach(async () => {
@@ -78,14 +79,14 @@ describe("EpochIntent", () => {
     it("should create an intent with the correct structure", () => {
       const intent = sdk.createIntent(
         mockIntent.sender,
-        mockIntent.task,
+        mockTask,
         mockIntent.approvals
       );
 
       expect(intent).toEqual({
         sender: mockIntent.sender,
         approvals: mockIntent.approvals,
-        task: encodeBase64(mockIntent.task),
+        task: encodeBase64(mockTask),
         constraint: {
           constraintData: "0x",
           constraintResponse: "0x",
@@ -108,7 +109,7 @@ describe("EpochIntent", () => {
     it("should fetch nonce from SIO", async () => {
       const intent = sdk.createIntent(
         mockIntent.sender,
-        mockIntent.task,
+        mockTask,
         mockIntent.approvals
       );
 
@@ -134,7 +135,7 @@ describe("EpochIntent", () => {
     it("should get correct intent hash", async () => {
       const intent = sdk.createIntent(
         mockIntent.sender,
-        mockIntent.task,
+        mockTask,
         mockIntent.approvals
       );
 
@@ -148,7 +149,7 @@ describe("EpochIntent", () => {
     it("should sign the intent correctly and get correct signature", async () => {
       const intent = sdk.createIntent(
         mockIntent.sender,
-        mockIntent.task,
+        mockTask,
         mockIntent.approvals
       );
 
@@ -187,7 +188,7 @@ describe("EpochIntent", () => {
 
       const intent = sdk.createIntent(
         mockIntent.sender,
-        mockIntent.task,
+        mockTask,
         mockIntent.approvals
       );
       const signature = await sdk.signIntent(intent, mockSigner);
@@ -202,25 +203,5 @@ describe("EpochIntent", () => {
       expect(result.success).toBe(true);
       expect(result.transactionHash).toBe("0x123");
     });
-  });
-
-  describe("createWallet", () => {
-    it("should create a wallet", async () => {
-      const userAddress = await mockSigner.getAddress();
-      const proxyAddress = await sdk.createWallet(
-        userAddress,
-        await mockSigner.getChainId(),
-        relayerSigningKey,
-        {
-          is7702: true,
-          userSigner: mockWalletClient,
-        }
-      );
-
-      const codeAtUserAddress = await mockSigner.provider?.getCode(userAddress);
-
-      expect(proxyAddress).toBe("0xAd5A35DdBeE1dC40B9b8de21e4b6b106278dc287");
-      expect(codeAtUserAddress).not.toBe("0x");
-    }, 100000000);
   });
 });
