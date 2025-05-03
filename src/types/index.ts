@@ -133,9 +133,6 @@ export type Relationships = {
       [chainName: string]: string[]; // List of tokens a protocol supports on a specific chain
     };
   };
-  tokenChains: {
-    [tokenName: string]: string[];
-  };
 };
 
 // Define the Graph type
