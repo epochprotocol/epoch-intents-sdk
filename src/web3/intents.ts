@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { Intent } from "../types";
+import { Intent, TokenConstraint } from "../types";
 
 export const getEncodedIntent = (intent: Intent) => {
   const abiCoder = new ethers.utils.AbiCoder();
@@ -27,4 +27,13 @@ export const getIntentHash = (intent: Intent) => {
 export const getEIP191IntentHash = (intent: Intent) => {
   const encodedIntent = getEncodedIntent(intent);
   return ethers.utils.hashMessage(encodedIntent);
+};
+
+export const getEncodedTokenConstraint = (constraint: TokenConstraint) => {
+  const abiCoder = new ethers.utils.AbiCoder();
+  const encodedConstraint = abiCoder.encode(
+    ["address", "address[]", "uint256[]"],
+    [constraint.user, constraint.tokens, constraint.amount]
+  );
+  return ethers.utils.arrayify(encodedConstraint);
 };
