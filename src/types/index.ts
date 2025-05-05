@@ -175,9 +175,8 @@ export type Approval = {
 };
 
 export type Constraint = {
+  constraintAddress: string;
   constraintData: string;
-  constraintResponse: string;
-  constraints: string;
   optimizationFactor: number;
   deadline: number;
   triggers: string;
@@ -298,4 +297,10 @@ export interface IntentQuoteInterface {
   /// Can be used to define tokens, amounts, destination chains, fees, settlement parameters,
   /// or any other order-type specific information
   orderData: string;
+}
+
+export interface TokenConstraint {
+  user: string;
+  tokens: string[];
+  amount: string[];
 }
