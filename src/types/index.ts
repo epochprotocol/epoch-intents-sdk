@@ -131,7 +131,11 @@ export type Chain = {
 export type Relationships = {
   protocolTokensByChain: {
     [protocolName: string]: {
-      [chainName: string]: string[]; // List of tokens a protocol supports on a specific chain
+      [chainName: string]: {
+        tokensIn?: string[];
+        tokensOut?: string[];
+        tokensInAndOut?: string[];
+      }; // List of tokens a protocol supports on a specific chain
     };
   };
 };
