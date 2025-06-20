@@ -58,6 +58,11 @@ export type Transaction = {
   value: string;
 };
 
+export enum WalletType {
+  safe = "safe",
+  metamask = "metamask",
+}
+
 export type CreateWalletOptions = {
   is7702?: boolean;
   userSigner?: ethers.VoidSigner | ethers.Signer | WalletClient;
@@ -228,6 +233,7 @@ export interface QuoteReturnInterface {
   optionalData: string;
   quoteId: string;
   quoteData: string;
+  callData: CalldataReturnInterface;
 }
 
 export interface ExecutionResult {
