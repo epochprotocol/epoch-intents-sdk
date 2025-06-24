@@ -6,6 +6,10 @@ import {
   http,
   PrivateKeyAccount,
   WalletClient,
+  Client,
+  Account,
+  encodeFunctionData,
+  publicActions,
 } from "viem";
 import { SignAuthorizationReturnType } from "viem/_types/accounts/utils/signAuthorization";
 import { privateKeyToAccount } from "viem/accounts";
@@ -31,11 +35,17 @@ import {
   AuthorizationListEntryAny,
   CreateWalletData,
   CreateWalletOptions,
+  WalletType,
 } from "../types";
 import { getProvider } from "../web3";
 
 import safe7702ProxyFactoryAbi from "./abis/safe7702ProxyFactoryAbi";
 import safeProxyFactoryAbi from "./abis/safeProxyFactoryAbi";
+import {
+  DeployParams,
+  Implementation,
+  toMetaMaskSmartAccount,
+} from "@metamask/delegation-toolkit";
 
 export const getSafeProxyFactoryInstance = (
   chainId: number,
@@ -52,163 +62,264 @@ export const getSafeProxyFactoryInstance = (
 };
 
 export const calculateProxyAddress = async (
-  factory: ethers.Contract,
-  singleton: string,
-  inititalizer: string,
-  nonce: number | string
+  walletType: WalletType,
+  options?: {
+    safeOptions?: {
+      factory: ethers.Contract;
+      singleton: string;
+      inititalizer: string;
+      nonce: number | string;
+    };
+    metamaskOptions?: {
+      userAddress: string;
+      userSigner: WalletClient;
+    };
+  }
 ) => {
-  const salt = ethers.utils.solidityKeccak256(
-    ["bytes32", "uint256"],
-    [ethers.utils.solidityKeccak256(["bytes"], [inititalizer]), nonce]
-  );
-  const factoryAddress = factory.address;
-  const proxyCreationCode = await factory.proxyCreationCode();
+  if (walletType === WalletType.metamask) {
+    if (!options?.metamaskOptions) {
+      throw new Error("Metamask options are required");
+    }
+    const delegatorSmartAccount = await getMetamaskDelegatorInstance(
+      options?.metamaskOptions?.userAddress,
+      options?.metamaskOptions?.userSigner as WalletClient
+    );
 
-  const deploymentCode = ethers.utils.solidityPack(
-    ["bytes", "uint256", "uint256"],
-    [proxyCreationCode, ethers.utils.keccak256(inititalizer), singleton]
-  );
-  return ethers.utils.getCreate2Address(
-    factoryAddress,
-    salt,
-    ethers.utils.keccak256(deploymentCode)
-  );
+    return delegatorSmartAccount.address;
+  } else if (walletType === WalletType.safe) {
+    if (!options?.safeOptions) {
+      throw new Error("Safe options are required");
+    }
+    const salt = ethers.utils.solidityKeccak256(
+      ["bytes32", "uint256"],
+      [
+        ethers.utils.solidityKeccak256(
+          ["bytes"],
+          [options.safeOptions.inititalizer]
+        ),
+        options.safeOptions.nonce,
+      ]
+    );
+    const factoryAddress = options.safeOptions.factory.address;
+    const proxyCreationCode =
+      await options.safeOptions.factory.proxyCreationCode();
+
+    const deploymentCode = ethers.utils.solidityPack(
+      ["bytes", "uint256", "uint256"],
+      [
+        proxyCreationCode,
+        ethers.utils.keccak256(options.safeOptions.inititalizer),
+        options.safeOptions.singleton,
+      ]
+    );
+    return ethers.utils.getCreate2Address(
+      factoryAddress,
+      salt,
+      ethers.utils.keccak256(deploymentCode)
+    );
+  } else {
+    throw new Error("Invalid wallet type");
+  }
+};
+
+export const getMetamaskDelegatorInstance = async (
+  userAddress: string,
+  userSigner: WalletClient
+) => {
+  const walletClientwithPublic = userSigner.extend(publicActions);
+  const deployParams: DeployParams<Implementation.Hybrid> = [
+    userAddress as `0x${string}`,
+    [],
+    [],
+    [],
+  ];
+
+  return await toMetaMaskSmartAccount({
+    client: walletClientwithPublic,
+    implementation: Implementation.Hybrid,
+    deployParams,
+    deploySalt: "0x",
+    signatory: { walletClient: walletClientwithPublic as any },
+  });
 };
 
 export const getCreateWalletData = async (
   userAddress: string,
   chainId: number,
+  walletType: WalletType,
   options?: CreateWalletOptions
 ): Promise<CreateWalletData> => {
-  const { is7702 } = { ...options };
-  const abiCoder = new ethers.utils.AbiCoder();
+  console.log("walletType: ", walletType);
+  if (walletType === WalletType.metamask) {
+    console.log("WalletType.metamask: ", WalletType.metamask);
 
-  const safeOwners = [userAddress];
-  const salt = Math.floor(Math.random() * 100000000);
-
-  const erc7579Data = abiCoder.encode(
-    [
-      "tuple[]",
-      "tuple[]",
-      "tuple[]",
-      "tuple[]",
-      "tuple(address registry, address[] attesters, uint256 threshold)",
-    ],
-    [
+    if (!options?.userSigner) {
+      throw new Error("only viem Client supported for Metamask");
+    }
+    const delegatorSmartAccount = await getMetamaskDelegatorInstance(
+      userAddress,
+      options?.userSigner as WalletClient
+    );
+    console.log("delegatorSmartAccount: ", delegatorSmartAccount);
+    const deployParams: DeployParams<Implementation.Hybrid> = [
+      userAddress as `0x${string}`,
       [],
       [],
       [],
-      [],
-      {
-        registry: SAFE_7579_REGISTRY_ADDRESS[chainId],
-        attesters: [],
-        threshold: 0,
-      },
-    ]
-  );
-  const safeModuleSetupABI = [
-    "function enableModules(address moduleSetup, address module, bytes calldata initData, address moduleAddress)",
-  ];
-  const safeModuleSetupInterface = new ethers.utils.Interface(
-    safeModuleSetupABI
-  );
-  const safeModuleSetupData = safeModuleSetupInterface.encodeFunctionData(
-    "enableModules",
-    [
-      SAFE_7579_MODULE_ADDRESS[chainId],
-      SAFE_7579_MODULE_ADDRESS[chainId],
-      erc7579Data,
-      EPOCH_MODULE_SAFE_ADDRESS[chainId],
-    ]
-  );
-
-  const safeSetupABI = [
-    "function setup(address[] calldata _owners, uint256 _threshold, address to, bytes calldata data, address fallbackHandler, address paymentToken, uint256 payment, address payable paymentReceiver)",
-  ];
-  const safeSetupInterface = new ethers.utils.Interface(safeSetupABI);
-  const initializerData = safeSetupInterface.encodeFunctionData("setup", [
-    safeOwners,
-    1,
-    EPOCH_MODULE_SETUP[chainId],
-    safeModuleSetupData,
-    ethers.constants.AddressZero,
-    ethers.constants.AddressZero,
-    0,
-    ethers.constants.AddressZero,
-  ]);
-
-  const safeEIP7702ProxyFactory = getSafeProxyFactoryInstance(chainId, true);
-  const proxyFactory = getSafeProxyFactoryInstance(chainId);
-
-  const proxyAddress = await calculateProxyAddress(
-    is7702 ? safeEIP7702ProxyFactory : proxyFactory,
-    is7702
-      ? SAFE_7702_SINGLETON_ADDRESS[chainId]
-      : SAFE_SINGLETON_ADDRESS[chainId],
-    initializerData,
-    0
-  );
-
-  const provider = getProvider(chainId);
-  const isContract = await provider.getCode(proxyAddress);
-  if (isContract !== "0x") {
+    ];
+    console.log("deployParams: ", deployParams);
     return {
       txnData: {
-        target: "",
-        data: "",
+        target: delegatorSmartAccount.address,
+        data: "0x",
         value: "0",
       },
-      proxyAddress,
-      initializerData,
-      isAlreadyDeployed: true,
+      proxyAddress: delegatorSmartAccount.address,
+      initializerData: encodeFunctionData({
+        abi: delegatorSmartAccount.abi,
+        functionName: "initialize",
+        args: deployParams,
+      }),
+      isAlreadyDeployed: await delegatorSmartAccount.isDeployed(),
     };
-  }
+  } else if (walletType === WalletType.safe) {
+    const { is7702 } = { ...options };
+    const abiCoder = new ethers.utils.AbiCoder();
 
-  if (is7702) {
-    const proxyData =
-      await safeEIP7702ProxyFactory.populateTransaction.createProxyWithNonce(
-        SAFE_7702_SINGLETON_ADDRESS[chainId],
-        initializerData,
-        0
-      );
+    const safeOwners = [userAddress];
+    const salt = Math.floor(Math.random() * 100000000);
 
-    if (!proxyData.data) {
-      throw new Error("Failed to create proxy data");
+    const erc7579Data = abiCoder.encode(
+      [
+        "tuple[]",
+        "tuple[]",
+        "tuple[]",
+        "tuple[]",
+        "tuple(address registry, address[] attesters, uint256 threshold)",
+      ],
+      [
+        [],
+        [],
+        [],
+        [],
+        {
+          registry: SAFE_7579_REGISTRY_ADDRESS[chainId],
+          attesters: [],
+          threshold: 0,
+        },
+      ]
+    );
+    const safeModuleSetupABI = [
+      "function enableModules(address moduleSetup, address module, bytes calldata initData, address moduleAddress)",
+    ];
+    const safeModuleSetupInterface = new ethers.utils.Interface(
+      safeModuleSetupABI
+    );
+    const safeModuleSetupData = safeModuleSetupInterface.encodeFunctionData(
+      "enableModules",
+      [
+        SAFE_7579_MODULE_ADDRESS[chainId],
+        SAFE_7579_MODULE_ADDRESS[chainId],
+        erc7579Data,
+        EPOCH_MODULE_SAFE_ADDRESS[chainId],
+      ]
+    );
+
+    const safeSetupABI = [
+      "function setup(address[] calldata _owners, uint256 _threshold, address to, bytes calldata data, address fallbackHandler, address paymentToken, uint256 payment, address payable paymentReceiver)",
+    ];
+    const safeSetupInterface = new ethers.utils.Interface(safeSetupABI);
+    const initializerData = safeSetupInterface.encodeFunctionData("setup", [
+      safeOwners,
+      1,
+      EPOCH_MODULE_SETUP[chainId],
+      safeModuleSetupData,
+      ethers.constants.AddressZero,
+      ethers.constants.AddressZero,
+      0,
+      ethers.constants.AddressZero,
+    ]);
+
+    const safeEIP7702ProxyFactory = getSafeProxyFactoryInstance(chainId, true);
+    const proxyFactory = getSafeProxyFactoryInstance(chainId);
+
+    const proxyAddress = await calculateProxyAddress(walletType, {
+      safeOptions: {
+        factory: is7702 ? safeEIP7702ProxyFactory : proxyFactory,
+        singleton: is7702
+          ? SAFE_7702_SINGLETON_ADDRESS[chainId]
+          : SAFE_SINGLETON_ADDRESS[chainId],
+        inititalizer: initializerData,
+        nonce: 0,
+      },
+    });
+
+    if (!proxyAddress) {
+      throw new Error("Failed to calculate proxy address");
     }
 
-    return {
-      txnData: {
-        target: safeEIP7702ProxyFactory.address,
-        data: proxyData.data,
-        value: "0",
-      },
-      proxyAddress,
-      initializerData,
-      isAlreadyDeployed: false,
-    };
-  } else {
-    const proxyData =
-      await proxyFactory.populateTransaction.createProxyWithNonce(
-        SAFE_SINGLETON_ADDRESS[chainId],
+    const provider = getProvider(chainId);
+    const isContract = await provider.getCode(proxyAddress);
+    if (isContract !== "0x") {
+      return {
+        txnData: {
+          target: "",
+          data: "",
+          value: "0",
+        },
+        proxyAddress,
         initializerData,
-        salt
-      );
-
-    if (!proxyData.data) {
-      throw new Error("Failed to create proxy data");
+        isAlreadyDeployed: true,
+      };
     }
 
-    return {
-      txnData: {
-        target: proxyFactory.address,
-        data: proxyData.data,
-        value: "0",
-      },
-      proxyAddress,
-      initializerData,
-      isAlreadyDeployed: false,
-    };
+    if (is7702) {
+      const proxyData =
+        await safeEIP7702ProxyFactory.populateTransaction.createProxyWithNonce(
+          SAFE_7702_SINGLETON_ADDRESS[chainId],
+          initializerData,
+          0
+        );
+
+      if (!proxyData.data) {
+        throw new Error("Failed to create proxy data");
+      }
+
+      return {
+        txnData: {
+          target: safeEIP7702ProxyFactory.address,
+          data: proxyData.data,
+          value: "0",
+        },
+        proxyAddress,
+        initializerData,
+        isAlreadyDeployed: false,
+      };
+    } else {
+      const proxyData =
+        await proxyFactory.populateTransaction.createProxyWithNonce(
+          SAFE_SINGLETON_ADDRESS[chainId],
+          initializerData,
+          salt
+        );
+
+      if (!proxyData.data) {
+        throw new Error("Failed to create proxy data");
+      }
+
+      return {
+        txnData: {
+          target: proxyFactory.address,
+          data: proxyData.data,
+          value: "0",
+        },
+        proxyAddress,
+        initializerData,
+        isAlreadyDeployed: false,
+      };
+    }
   }
+  throw new Error("Invalid wallet type");
 };
 
 export const set7702Delegator = async (

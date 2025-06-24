@@ -11,11 +11,18 @@ import {
   Path,
   SolveIntentResponse,
   Task,
+  WalletType,
 } from "./types";
 import { encodeBase64 } from "./utils";
 import { executeTransaction, getProvider } from "./web3";
 import { getEIP191IntentHash, getIntentHash } from "./web3/intents";
-import { getCreateWalletData, set7702Delegator } from "./web3/wallet";
+import {
+  getCreateWalletData,
+  getMetamaskDelegatorInstance,
+  set7702Delegator,
+} from "./web3/wallet";
+import { createDelegation, Delegation } from "@metamask/delegation-toolkit";
+import { CONTRACT_ADDRESSES, METAMASK_EXEC_MANAGER } from "./constants";
 
 /**
  * Creates a new SDK instance with the given configuration
@@ -32,6 +39,7 @@ export const EpochIntents = (config: Config) => {
     createWallet: async (
       userAddress: string,
       chainId: number,
+      walletType: WalletType,
       relayer:
         | ethers.utils.SigningKey
         | ethers.VoidSigner
@@ -40,6 +48,11 @@ export const EpochIntents = (config: Config) => {
       options?: CreateWalletOptions
     ): Promise<string> => {
       if (options?.is7702) {
+        if (walletType === WalletType.metamask) {
+          throw new Error(
+            "Metamask Wallet is not supported at the moment for 7702"
+          );
+        }
         if (
           options.userSigner instanceof ethers.VoidSigner ||
           options.userSigner instanceof ethers.Signer
@@ -56,7 +69,7 @@ export const EpochIntents = (config: Config) => {
       }
 
       const { txnData, proxyAddress, initializerData, isAlreadyDeployed } =
-        await getCreateWalletData(userAddress, chainId, options);
+        await getCreateWalletData(userAddress, chainId, walletType, options);
       if (!proxyAddress) {
         throw new Error("Could not deploy proxy.");
       }
@@ -92,11 +105,19 @@ export const EpochIntents = (config: Config) => {
     getUserSCWalletAddress: async (
       userAddress: string,
       chainId: number,
-      is7702?: boolean
+      walletType: WalletType,
+      is7702?: boolean,
+      options?: CreateWalletOptions
     ): Promise<string> => {
-      const { proxyAddress } = await getCreateWalletData(userAddress, chainId, {
-        is7702,
-      });
+      const { proxyAddress } = await getCreateWalletData(
+        userAddress,
+        chainId,
+        walletType,
+        {
+          is7702,
+          ...options,
+        }
+      );
 
       if (!proxyAddress) {
         throw new Error("Could not deploy proxy.");
@@ -202,7 +223,8 @@ export const EpochIntents = (config: Config) => {
      */
     signIntent: async (
       intent: Intent,
-      signer: ethers.VoidSigner | ethers.Signer | WalletClient
+      signer: ethers.VoidSigner | ethers.Signer | WalletClient,
+      walletType?: WalletType
     ): Promise<string> => {
       if (!signer) {
         throw new Error("Signer not provided");
@@ -216,6 +238,15 @@ export const EpochIntents = (config: Config) => {
           signer instanceof ethers.Signer
         ) {
           const signature = await signer.signMessage(message);
+          return signature;
+        } else if (walletType === WalletType.metamask) {
+          const metamaskDelegator = await getMetamaskDelegatorInstance(
+            signer.account?.address as string,
+            signer as WalletClient
+          );
+          const signature = await metamaskDelegator.signMessage({
+            message,
+          });
           return signature;
         } else {
           const account = signer.account;
@@ -248,6 +279,45 @@ export const EpochIntents = (config: Config) => {
      */
     getEIP191IntentHash: (intent: Intent): string => {
       return getEIP191IntentHash(intent);
+    },
+
+    signDelegation: async (
+      signer: WalletClient
+    ): Promise<Delegation & { signature: `0x${string}` }> => {
+      const metamaskDelegatorInstance = await getMetamaskDelegatorInstance(
+        signer.account?.address as string,
+        signer
+      );
+
+      const chainId = await signer.getChainId();
+
+      const delegation = createDelegation({
+        to: METAMASK_EXEC_MANAGER[chainId] as `0x${string}`,
+        from: metamaskDelegatorInstance.address,
+        caveats: [], // Empty caveats array - we recommend adding appropriate restrictions.
+      });
+
+      const signature = await metamaskDelegatorInstance.signDelegation({
+        delegation,
+      });
+
+      const signedDelegation = {
+        ...delegation,
+        signature,
+      };
+
+      return signedDelegation;
+    },
+
+    getContractAddresses: (): { [key: string]: { [key: number]: string } } => {
+      return CONTRACT_ADDRESSES;
+    },
+
+    getDelegatorInstance: async (
+      address: string,
+      signer: WalletClient
+    ): Promise<any> => {
+      return await getMetamaskDelegatorInstance(address, signer);
     },
   };
 
