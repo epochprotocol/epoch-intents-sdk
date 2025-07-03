@@ -100,7 +100,6 @@ export type CreateWalletData = {
 export enum ProtocolType {
   lending = "lending:deposit",
   bridge = "bridge",
-  filler = "filler",
   swap = "swap",
   restaking = "restaking",
   yield = "yield",
