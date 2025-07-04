@@ -103,6 +103,7 @@ export enum ProtocolType {
   swap = "swap",
   restaking = "restaking",
   yield = "yield",
+  swapandbridge = "swapandbridge",
 }
 
 export interface IntentTaskData {
