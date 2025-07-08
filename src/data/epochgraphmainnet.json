@@ -1,0 +1,394 @@
+{
+  "protocols": {
+    "aave-v3": {
+      "contractAddress": {
+        "Base": "0xAaveBaseAddress",
+        "Optimism": "0xAaveOptimismAddress",
+        "Mainnet": "0xAaveMainnetAddress"
+      },
+      "type": ["lending", "yield"]
+    },
+    "morpho-blue": {
+      "contractAddress": {
+        "Base": "0xMorphoBaseAddress",
+        "Mainnet": "0xMorphoMainnetAddress"
+      },
+      "type": ["lending", "yield"]
+    },
+    "Across": {
+      "contractAddress": {
+        "Base": "0xMorphoBaseAddress",
+        "Optimism": "0xMorphoOptimismAddress",
+        "Mainnet": "0xMorphoMainnetAddress"
+      },
+      "type": ["bridge"]
+    },
+    "Wormhole": {
+      "contractAddress": {
+        "Base": "0xMorphoBaseAddress",
+        "Optimism": "0xMorphoOptimismAddress",
+        "Mainnet": "0xMorphoMainnetAddress"
+      },
+      "type": ["bridge"]
+    },
+    "uniswap-v3": {
+      "contractAddress": {
+        "Base": "0xMorphoBaseAddress",
+        "Optimism": "0xMorphoOptimismAddress",
+        "Mainnet": "0xMorphoMainnetAddress"
+      },
+      "type": ["swap"]
+    },
+    "Kyber": {
+      "contractAddress": {
+        "Base": "0xMorphoBaseAddress",
+        "Optimism": "0xMorphoOptimismAddress",
+        "Mainnet": "0xMorphoMainnetAddress"
+      },
+      "type": ["swap"]
+    },
+    "Kelp": {
+      "contractAddress": {
+        "Base": "0xMorphoBaseAddress",
+        "Optimism": "0xMorphoOptimismAddress"
+      },
+      "type": ["restaking", "yield"]
+    },
+    "Lido": {
+      "contractAddress": {
+        "Mainnet": "0xMorphoMainnetAddress"
+      },
+      "type": ["restaking", "yield"]
+    },
+    "RocketPool": {
+      "contractAddress": {
+        "Mainnet": "0xMorphoMainnetAddress",
+        "Base": "0xMorphoBaseAddress"
+      },
+      "type": ["restaking", "yield"]
+    },
+    "Etherfi": {
+      "contractAddress": {
+        "Base": "0xMorphoBaseAddress",
+        "Mainnet": "0xMorphoMainnetAddress"
+      },
+      "type": ["restaking", "yield"]
+    },
+    "FillerSwap": {
+      "contractAddress": {
+        "*": "*"
+      },
+      "type": ["swap"]
+    },
+    "FillerCrossChain": {
+      "contractAddress": {
+        "*": "*"
+      },
+      "type": ["bridge"]
+    },
+    "moonwell": {
+      "contractAddress": {
+        "Base": "0xMorphoBaseAddress",
+        "Optimism": "0xMorphoOptimismAddress"
+      },
+      "type": ["lending", "yield"]
+    }
+  },
+  "tokens": {
+    "COLLAB": {
+      "contractAddress": {
+        "Optimism": "0x8B21e9b7dAF2c4325bf3D18c1BeB79A347fE902A"
+      },
+      "decimals": 18
+    },
+    "DAI": {
+      "contractAddress": {
+        "Base": "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb",
+        "Optimism": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+        "Mainnet": "0x6b175474e89094c44da98b954eedeac495271d0f"
+      },
+      "decimals": 18
+    },
+    "USDC": {
+      "contractAddress": {
+        "Base": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "Optimism": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+        "Mainnet": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+      },
+      "decimals": 6
+    },
+    "WETH": {
+      "contractAddress": {
+        "Base": "0x4200000000000000000000000000000000000006",
+        "Optimism": "0x4200000000000000000000000000000000000006",
+        "Mainnet": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+      },
+      "decimals": 18
+    },
+    "OP": {
+      "contractAddress": {
+        "Optimism": "0x4200000000000000000000000000000000000042"
+      },
+      "decimals": 18
+    },
+    "eUSD": {
+      "contractAddress": {
+        "Base": "0xCfA3Ef56d303AE4fAabA0592388F19d7C3399FB4"
+      },
+      "decimals": 18
+    },
+    "EURA": {
+      "contractAddress": {
+        "Base": "0xA61BeB4A3d02decb01039e378237032B351125B4"
+      },
+      "decimals": 18
+    },
+    "MAI": {
+      "contractAddress": {
+        "Base": "0xbf1aeA8670D2528E08334083616dD9C5F3B087aE"
+      },
+      "decimals": 18
+    },
+    "USDC.e": {
+      "contractAddress": {
+        "Optimism": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607"
+      },
+      "decimals": 6
+    },
+    "BAL": {
+      "contractAddress": {
+        "Base": "0x4158734D47Fc9692176B5085E0F52ee0Da5d47F1",
+        "Optimism": "0xFE8B128bA8C78aabC59d4c64cEE7fF28e9379921"
+      },
+      "decimals": 18
+    },
+    "POOL": {
+      "contractAddress": {
+        "Base": "0xd652C5425aea2Afd5fb142e120FeCf79e18fafc3",
+        "Optimism": "0x395Ae52bB17aef68C2888d941736A71dC6d4e125"
+      },
+      "decimals": 18
+    },
+    "USDbC": {
+      "contractAddress": {
+        "Base": "0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA"
+      },
+      "decimals": 6
+    },
+    "cbETH": {
+      "contractAddress": {
+        "Base": "0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22"
+      },
+      "decimals": 18
+    },
+    "rETH": {
+      "contractAddress": {
+        "Base": "0xB6fe221Fe9EeF5aBa221c348bA20A1Bf5e73624c"
+      },
+      "decimals": 18
+    },
+    "WBTC": {
+      "contractAddress": {
+        "Optimism": "0x68f180fcCe6836688e9084f035309E29Bf0A2095"
+      },
+      "decimals": 8
+    }
+  },
+  "chains": {
+    "Base": {
+      "chainId": 8453,
+      "explorer": "https://basescan.org"
+    },
+    "Optimism": {
+      "chainId": 10,
+      "explorer": "https://optimistic.etherscan.io"
+    },
+    "Mainnet": {
+      "chainId": 1,
+      "explorer": "https://etherscan.io"
+    }
+  },
+  "relationships": {
+    "protocolTokensByChain": {
+      "aave-v3": {
+        "Base": {
+          "tokensIn": ["WETH", "USDC", "DAI"],
+          "tokensOut": ["aETH", "aUSDC", "aDAI"]
+        },
+        "Optimism": {
+          "tokensIn": ["WETH", "OP", "DAI"],
+          "tokensOut": ["aETH", "aOP", "aDAI"]
+        }
+      },
+      "morpho-blue": {
+        "Base": {
+          "tokensIn": ["USDC", "eUSD", "WETH", "EURA", "MAI"],
+          "tokensOut": ["mUSDC", "meUSD", "mWETH", "mEURA", "mMAI"]
+        }
+      },
+      "moonwell": {
+        "Base": {
+          "tokensInAndOut": ["WETH", "USDbC", "rETH", "DAI", "cbETH"]
+        },
+        "Optimism": {
+          "tokensInAndOut": ["WETH", "USDC", "OP", "WBTC"]
+        }
+      },
+      "Across": {
+        "Base": {
+          "tokensInAndOut": ["WETH", "USDC", "DAI", "BAL", "POOL", "USDbC"]
+        },
+        "Optimism": {
+          "tokensInAndOut": [
+            "WETH",
+            "USDC",
+            "DAI",
+            "BAL",
+            "POOL",
+            "USDC.e",
+            "WBTC"
+          ]
+        },
+        "Mainnet": {
+          "tokensInAndOut": ["WETH", "USDC", "DAI", "WBTC"]
+        }
+      },
+      "Wormhole": {
+        "Base": {
+          "tokensInAndOut": ["WETH", "USDC", "DAI", "BAL", "POOL", "USDbC"]
+        },
+        "Optimism": {
+          "tokensInAndOut": ["WETH", "USDC", "DAI", "BAL", "POOL", "USDC.e"]
+        },
+        "Mainnet": {
+          "tokensInAndOut": ["WETH", "USDC", "DAI"]
+        }
+      },
+      "uniswap-v3": {
+        "Base": {
+          "tokensInAndOut": [
+            "WETH",
+            "USDC",
+            "DAI",
+            "BAL",
+            "POOL",
+            "USDbC",
+            "eUSD",
+            "MAI",
+            "rETH",
+            "cbETH"
+          ]
+        },
+        "Optimism": {
+          "tokensInAndOut": [
+            "WETH",
+            "USDC",
+            "USDC.e",
+            "DAI",
+            "BAL",
+            "POOL",
+            "OP",
+            "COLLAB"
+          ]
+        },
+        "Mainnet": {
+          "tokensInAndOut": ["WETH", "USDC", "DAI"]
+        }
+      },
+      "Kyber": {
+        "Base": {
+          "tokensInAndOut": [
+            "WETH",
+            "USDC",
+            "DAI",
+            "BAL",
+            "POOL",
+            "USDbC",
+            "eUSD",
+            "MAI",
+            "rETH",
+            "cbETH"
+          ]
+        },
+        "Optimism": {
+          "tokensInAndOut": [
+            "WETH",
+            "USDC",
+            "USDC.e",
+            "DAI",
+            "BAL",
+            "POOL",
+            "OP",
+            "COLLAB"
+          ]
+        },
+        "Mainnet": {
+          "tokensInAndOut": ["WETH", "USDC", "DAI"]
+        }
+      },
+      "Kelp": {
+        "Base": {
+          "tokensIn": ["WETH"],
+          "tokensOut": ["rsETH"]
+        },
+        "Optimism": {
+          "tokensIn": ["WETH"],
+          "tokensOut": ["rsETH"]
+        }
+      },
+      "Lido": {
+        "Mainnet": {
+          "tokensIn": ["WETH"],
+          "tokensOut": ["stETH"]
+        }
+      },
+      "RocketPool": {
+        "Mainnet": {
+          "tokensIn": ["WETH"],
+          "tokensOut": ["rETH"]
+        },
+        "Base": {
+          "tokensIn": ["WETH"],
+          "tokensOut": ["rETH"]
+        }
+      },
+      "Etherfi": {
+        "Mainnet": {
+          "tokensIn": ["WETH"],
+          "tokensOut": ["eETH"]
+        },
+        "Base": {
+          "tokensIn": ["WETH"],
+          "tokensOut": ["eETH"]
+        }
+      },
+      "FillerSwap": {
+        "*": {
+          "tokensInAndOut": ["*"]
+        }
+      },
+      "FillerCrossChain": {
+        "*": {
+          "tokensInAndOut": ["*"]
+        }
+      }
+    },
+    "tokenChains": {
+      "DAI": ["Base", "Optimism", "Mainnet"],
+      "USDC": ["Base", "Optimism", "Mainnet"],
+      "WETH": ["Base", "Optimism", "Mainnet"],
+      "OP": ["Optimism"],
+      "rETH": ["Base"],
+      "cbETH": ["Base"],
+      "WBTC": ["Base", "Optimism"],
+      "eUSD": ["Base"],
+      "EURA": ["Base"],
+      "MAI": ["Base"],
+      "USDC.e": ["Optimism"],
+      "BAL": ["Base", "Optimism"],
+      "POOL": ["Base", "Optimism"],
+      "USDbC": ["Base"],
+      "COLLAB": ["Optimism"]
+    }
+  }
+}

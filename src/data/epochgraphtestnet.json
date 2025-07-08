@@ -1,0 +1,133 @@
+{
+  "protocols": {
+    "aave-v3": {
+      "contractAddress": {
+        "Base": "0xAaveBaseAddress",
+        "Optimism": "0xAaveOptimismAddress",
+        "Mainnet": "0xAaveSepoliaAddress"
+      },
+      "type": ["lending", "yield"]
+    },
+
+    "dummy-lending": {
+      "contractAddress": {
+        "Monad": "0xMorphoMonadAddress"
+      },
+      "type": ["lending", "yield"]
+    },
+
+    "uniswap-v3": {
+      "contractAddress": {
+        "Base": "0xMorphoBaseAddress",
+        "Optimism": "0xMorphoOptimismAddress",
+        "Mainnet": "0xMorphoMainnetAddress",
+        "Monad": "0xMorphoMonadAddress"
+      },
+      "type": ["swap"]
+    },
+    "Filler": {
+      "contractAddress": {
+        "*": "*"
+      },
+      "type": ["filler"]
+    }
+  },
+  "tokens": {
+    "USDC": {
+      "contractAddress": {
+        "Base": "0xba50Cd2A20f6DA35D788639E581bca8d0B5d4D5f",
+        "Optimism": "0x5fd84259d66Cd46123540766Be93DFE6D43130D7",
+        "Monad": "0xf817257fed379853cDe0fa4F97AB987181B1E5Ea",
+        "Mainnet": "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8"
+      },
+      "decimals": 6
+    },
+
+    "ETH": {
+      "contractAddress": {
+        "Base": "0x4200000000000000000000000000000000000006",
+        "Optimism": "0x4200000000000000000000000000000000000006",
+        "Monad": "0xB5a30b0FDc5EA94A52fDc42e3E9760Cb8449Fb37",
+        "Mainnet": "0xC558DBdd856501FCd9aaF1E62eae57A9F0629a3c"
+      },
+      "decimals": 18
+    },
+    "WETH": {
+      "contractAddress": {
+        "Base": "0x4200000000000000000000000000000000000006",
+        "Optimism": "0x4200000000000000000000000000000000000006",
+        "Monad": "0xB5a30b0FDc5EA94A52fDc42e3E9760Cb8449Fb37",
+        "Mainnet": "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14"
+      },
+      "decimals": 18
+    }
+  },
+  "chains": {
+    "Base": {
+      "chainId": 84532,
+      "explorer": "https://sepolia.basescan.org/"
+    },
+    "Optimism": {
+      "chainId": 11155420,
+      "explorer": "https://sepolia-optimistic.etherscan.io/"
+    },
+    "Mainnet": {
+      "chainId": 11155111,
+      "explorer": "https://sepolia.etherscan.io/"
+    },
+    "Monad": {
+      "chainId": 10143,
+      "explorer": "https://testnet.monadexplorer.com/"
+    }
+  },
+  "relationships": {
+    "protocolTokensByChain": {
+      "aave-v3": {
+        "Base": {
+          "tokensIn": ["ETH", "USDC"],
+          "tokensOut": ["aETH", "aUSDC"]
+        },
+        "Optimism": {
+          "tokensIn": ["ETH", "DAI", "WETH"],
+          "tokensOut": ["aETH", "aDAI", "aWETH"]
+        },
+        "Mainnet": {
+          "tokensIn": ["ETH", "WETH", "USDC"],
+          "tokensOut": ["aWETH", "aWETH", "aUSDC"]
+        }
+      },
+      "dummy-lending": {
+        "Monad": {
+          "tokensIn": ["ETH", "USDC"],
+          "tokensOut": []
+        }
+      },
+
+      "uniswap-v3": {
+        "Base": {
+          "tokensInAndOut": ["ETH", "WETH", "USDC"]
+        },
+        "Optimism": {
+          "tokensInAndOut": ["ETH", "WETH", "USDC"]
+        },
+        "Mainnet": {
+          "tokensInAndOut": ["ETH", "WETH", "USDC", "DAI"]
+        },
+        "Monad": {
+          "tokensInAndOut": ["ETH", "WETH", "USDC"]
+        }
+      },
+      "Filler": {
+        "*": {
+          "tokensInAndOut": ["*"]
+        }
+      }
+    },
+    "tokenChains": {
+      "DAI": ["Base", "Optimism", "Mainnet"],
+      "USDC": ["Base", "Optimism", "Mainnet", "Monad"],
+      "ETH": ["Base", "Optimism", "Mainnet", "Monad"],
+      "WETH": ["Base", "Optimism", "Mainnet", "Monad"]
+    }
+  }
+}

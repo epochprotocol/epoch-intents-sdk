@@ -23,6 +23,8 @@ import {
 } from "./web3/wallet";
 import { createDelegation, Delegation } from "@metamask/delegation-toolkit";
 import { CONTRACT_ADDRESSES, METAMASK_EXEC_MANAGER } from "./constants";
+import mainnetGraph from "./data/epochgraphmainnet.json";
+import testnetGraph from "./data/epochgraphtestnet.json";
 
 /**
  * Creates a new SDK instance with the given configuration
@@ -326,3 +328,4 @@ export const EpochIntents = (config: Config) => {
 
 // Export types
 export * from "./types";
+export { mainnetGraph, testnetGraph };
