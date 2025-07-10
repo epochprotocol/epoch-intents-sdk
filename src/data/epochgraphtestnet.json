@@ -35,7 +35,7 @@
   "tokens": {
     "USDC": {
       "contractAddress": {
-        "Base": "0xba50Cd2A20f6DA35D788639E581bca8d0B5d4D5f",
+        "Base": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
         "Optimism": "0x5fd84259d66Cd46123540766Be93DFE6D43130D7",
         "Monad": "0xf817257fed379853cDe0fa4F97AB987181B1E5Ea",
         "Mainnet": "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8"
