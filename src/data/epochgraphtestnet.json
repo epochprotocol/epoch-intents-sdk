@@ -25,11 +25,17 @@
       },
       "type": ["swap"]
     },
-    "Filler": {
+    "FillerSwap": {
       "contractAddress": {
         "*": "*"
       },
-      "type": ["filler"]
+      "type": ["swap"]
+    },
+    "FillerCrossChain": {
+      "contractAddress": {
+        "*": "*"
+      },
+      "type": ["bridge"]
     }
   },
   "tokens": {
@@ -41,16 +47,6 @@
         "Mainnet": "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8"
       },
       "decimals": 6
-    },
-
-    "ETH": {
-      "contractAddress": {
-        "Base": "0x4200000000000000000000000000000000000006",
-        "Optimism": "0x4200000000000000000000000000000000000006",
-        "Monad": "0xB5a30b0FDc5EA94A52fDc42e3E9760Cb8449Fb37",
-        "Mainnet": "0xC558DBdd856501FCd9aaF1E62eae57A9F0629a3c"
-      },
-      "decimals": 18
     },
     "WETH": {
       "contractAddress": {
@@ -84,37 +80,37 @@
     "protocolTokensByChain": {
       "aave-v3": {
         "Base": {
-          "tokensIn": ["ETH", "USDC"],
+          "tokensIn": ["USDC"],
           "tokensOut": ["aETH", "aUSDC"]
         },
         "Optimism": {
-          "tokensIn": ["ETH", "DAI", "WETH"],
+          "tokensIn": ["DAI", "WETH"],
           "tokensOut": ["aETH", "aDAI", "aWETH"]
         },
         "Mainnet": {
-          "tokensIn": ["ETH", "WETH", "USDC"],
+          "tokensIn": ["WETH", "USDC"],
           "tokensOut": ["aWETH", "aWETH", "aUSDC"]
         }
       },
       "dummy-lending": {
         "Monad": {
-          "tokensIn": ["ETH", "USDC"],
+          "tokensIn": ["USDC"],
           "tokensOut": []
         }
       },
 
       "uniswap-v3": {
         "Base": {
-          "tokensInAndOut": ["ETH", "WETH", "USDC"]
+          "tokensInAndOut": ["WETH", "USDC"]
         },
         "Optimism": {
-          "tokensInAndOut": ["ETH", "WETH", "USDC"]
+          "tokensInAndOut": ["WETH", "USDC"]
         },
         "Mainnet": {
-          "tokensInAndOut": ["ETH", "WETH", "USDC", "DAI"]
+          "tokensInAndOut": ["WETH", "USDC", "DAI"]
         },
         "Monad": {
-          "tokensInAndOut": ["ETH", "WETH", "USDC"]
+          "tokensInAndOut": ["WETH", "USDC"]
         }
       },
       "Filler": {
@@ -126,7 +122,6 @@
     "tokenChains": {
       "DAI": ["Base", "Optimism", "Mainnet"],
       "USDC": ["Base", "Optimism", "Mainnet", "Monad"],
-      "ETH": ["Base", "Optimism", "Mainnet", "Monad"],
       "WETH": ["Base", "Optimism", "Mainnet", "Monad"]
     }
   }
