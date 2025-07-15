@@ -70,7 +70,6 @@ export const SAFE_7702_SINGLETON_ADDRESS: { [key: number]: string } = {
   11155420: "0x18F2d1EB128e64fE5EDcCa6A0Fa7702Aa44cf664",
 };
 
-//todo: update for testnets
 export const SAFE_7579_MODULE_ADDRESS: { [key: number]: string } = {
   1: "0x7579EE8307284F293B1927136486880611F20002",
   10: "0x7579EE8307284F293B1927136486880611F20002",
