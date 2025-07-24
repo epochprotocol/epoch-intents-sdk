@@ -113,7 +113,12 @@
           "tokensInAndOut": ["WETH", "USDC"]
         }
       },
-      "Filler": {
+      "FillerCrossChain": {
+        "*": {
+          "tokensInAndOut": ["*"]
+        }
+      },
+      "FillerSwap": {
         "*": {
           "tokensInAndOut": ["*"]
         }

@@ -45,7 +45,7 @@ export const EPOCH_MODULE_SETUP: { [key: number]: string } = {
   84532: "0xd88bA0338E5B922d0d897e47048Ab8b3A5AcFFCB",
   10143: "0xd88bA0338E5B922d0d897e47048Ab8b3A5AcFFCB",
 };
-
+//todo: update for testnets
 export const SAFE_PROXY_FACTORY_ADDRESS: { [key: number]: string } = {
   1: "0x27Fc9AfE8a821D32206b4a2C0D92C09c3a3CAB80",
   10: "0xB376F73B9dDf2bf877377e0a0393218f2Bc0C2B1",
@@ -56,7 +56,7 @@ export const SAFE_PROXY_FACTORY_ADDRESS: { [key: number]: string } = {
   84532: "0xfbc1D97f7F7d02ab8D08200762636F1071c349f4",
   10143: "0xfbc1D97f7F7d02ab8D08200762636F1071c349f4",
 };
-
+//todo: update for testnets
 export const SAFE_SINGLETON_ADDRESS: { [key: number]: string } = {
   1: "0x63A09aDd838aeC0f5611875DFC1A23fE2C5A52fC",
   10: "0x1dEa7B3BBB4a4b7a4107f63421590e106D2E5D58",
@@ -68,6 +68,7 @@ export const SAFE_SINGLETON_ADDRESS: { [key: number]: string } = {
   10143: "0x85F91481FF2C163363E70EF09B94537BE2d98091",
 };
 
+//todo: update for testnets
 export const SAFE_7702_SINGLETON_ADDRESS: { [key: number]: string } = {
   1: "0x63A09aDd838aeC0f5611875DFC1A23fE2C5A52fC",
   10: "0x63A09aDd838aeC0f5611875DFC1A23fE2C5A52fC",
@@ -89,7 +90,7 @@ export const SAFE_7579_MODULE_ADDRESS: { [key: number]: string } = {
   84532: "0x7579EE8307284F293B1927136486880611F20002",
   10143: "0x7579EE8307284F293B1927136486880611F20002",
 };
-
+//todo: update for testnets
 export const SAFE_7579_REGISTRY_ADDRESS: { [key: number]: string } = {
   1: "0xc8490cDee50174A00105598AD615e2d00f0Cfb10",
   10: "0x6cDd037f744AD232185C53F627dCe8a2FF121987",
@@ -100,7 +101,7 @@ export const SAFE_7579_REGISTRY_ADDRESS: { [key: number]: string } = {
   84532: "0x2e4daD2ada674F3D9F44A21FABa020314D71B632",
   10143: "0x2e4daD2ada674F3D9F44A21FABa020314D71B632",
 };
-
+//todo: update for testnets
 export const EIP7702_SAFE_PROXY_ADDRESS: { [key: number]: string } = {
   1: "0xc8490cDee50174A00105598AD615e2d00f0Cfb10",
   10: "0xc8490cDee50174A00105598AD615e2d00f0Cfb10",
