@@ -21,7 +21,11 @@ import {
   getMetamaskDelegatorInstance,
   set7702Delegator,
 } from "./web3/wallet";
-import { createDelegation, Delegation } from "@metamask/delegation-toolkit";
+import {
+  createCaveatBuilder,
+  createDelegation,
+  Delegation,
+} from "@metamask/delegation-toolkit";
 import { CONTRACT_ADDRESSES, METAMASK_EXEC_MANAGER } from "./constants";
 import mainnetGraph from "./data/epochgraphmainnet.json";
 import testnetGraph from "./data/epochgraphtestnet.json";
@@ -242,9 +246,12 @@ export const EpochIntents = (config: Config) => {
           const signature = await signer.signMessage(message);
           return signature;
         } else if (walletType === WalletType.metamask) {
+          const intentWalletAddress = intent.sender;
+          const is7702 = intentWalletAddress === signer.account?.address;
           const metamaskDelegator = await getMetamaskDelegatorInstance(
-            signer.account?.address as string,
-            signer as WalletClient
+            intentWalletAddress as string,
+            signer as WalletClient,
+            is7702
           );
           const signature = await metamaskDelegator.signMessage({
             message,
@@ -284,11 +291,13 @@ export const EpochIntents = (config: Config) => {
     },
 
     signDelegation: async (
-      signer: WalletClient
+      signer: WalletClient,
+      is7702?: boolean
     ): Promise<Delegation & { signature: `0x${string}` }> => {
       const metamaskDelegatorInstance = await getMetamaskDelegatorInstance(
         signer.account?.address as string,
-        signer
+        signer,
+        is7702
       );
 
       const chainId = await signer.getChainId();
@@ -298,6 +307,19 @@ export const EpochIntents = (config: Config) => {
         from: metamaskDelegatorInstance.address,
         caveats: [], // Empty caveats array - we recommend adding appropriate restrictions.
       });
+
+      const environment = metamaskDelegatorInstance.environment;
+      const caveatBuilder = createCaveatBuilder(environment);
+      const caveats = caveatBuilder
+        .addCaveat("allowedTargets", [
+          "0xc11F3a8E5C7D16b75c9E2F60d26f5321C6Af5E92",
+        ])
+        .addCaveat("allowedMethods", [
+          "approve(address,uint256)",
+          "transfer(address,uint256)",
+        ])
+        .addCaveat("limitedCalls", 1)
+        .build();
 
       const signature = await metamaskDelegatorInstance.signDelegation({
         delegation,
@@ -311,15 +333,20 @@ export const EpochIntents = (config: Config) => {
       return signedDelegation;
     },
 
-    getContractAddresses: (): { [key: string]: { [key: number]: string } } => {
-      return CONTRACT_ADDRESSES;
-    },
-
     getDelegatorInstance: async (
       address: string,
-      signer: WalletClient
+      signer: WalletClient,
+      is7702?: boolean,
+      isPasskey?: boolean,
+      passkey?: any
     ): Promise<any> => {
-      return await getMetamaskDelegatorInstance(address, signer);
+      return await getMetamaskDelegatorInstance(
+        address,
+        signer,
+        is7702,
+        isPasskey,
+        passkey
+      );
     },
   };
 
@@ -329,3 +356,4 @@ export const EpochIntents = (config: Config) => {
 // Export types
 export * from "./types";
 export { mainnetGraph, testnetGraph };
+export { CONTRACT_ADDRESSES };
