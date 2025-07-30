@@ -41,19 +41,28 @@
   "tokens": {
     "USDC": {
       "contractAddress": {
-        "Base": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
-        "Optimism": "0x5fd84259d66Cd46123540766Be93DFE6D43130D7",
-        "Monad": "0xf817257fed379853cDe0fa4F97AB987181B1E5Ea",
-        "Mainnet": "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8"
+        "Base": "0x3b8bA5DF76689f704d4C16f2011223AEf525F288",
+        "Optimism": "0x3b8bA5DF76689f704d4C16f2011223AEf525F288",
+        "Monad": "0x3b8bA5DF76689f704d4C16f2011223AEf525F288",
+        "Mainnet": "0x3b8bA5DF76689f704d4C16f2011223AEf525F288"
       },
-      "decimals": 6
+      "decimals": 18
     },
-    "WETH": {
+    "DAI": {
       "contractAddress": {
-        "Base": "0x4200000000000000000000000000000000000006",
-        "Optimism": "0x4200000000000000000000000000000000000006",
-        "Monad": "0xB5a30b0FDc5EA94A52fDc42e3E9760Cb8449Fb37",
-        "Mainnet": "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14"
+        "Base": "0x64B02aA7C8befBc814505BB94Ea616bCA1B381d9",
+        "Optimism": "0x64B02aA7C8befBc814505BB94Ea616bCA1B381d9",
+        "Monad": "0x64B02aA7C8befBc814505BB94Ea616bCA1B381d9",
+        "Mainnet": "0x64B02aA7C8befBc814505BB94Ea616bCA1B381d9"
+      },
+      "decimals": 18
+    },
+    "USDT": {
+      "contractAddress": {
+        "Base": "0x2591d4C1760CDa6FC4fb51eAc1c4B0998D1F295A",
+        "Optimism": "0x2591d4C1760CDa6FC4fb51eAc1c4B0998D1F295A",
+        "Monad": "0x2591d4C1760CDa6FC4fb51eAc1c4B0998D1F295A",
+        "Mainnet": "0x2591d4C1760CDa6FC4fb51eAc1c4B0998D1F295A"
       },
       "decimals": 18
     }
@@ -78,39 +87,37 @@
   },
   "relationships": {
     "protocolTokensByChain": {
-      "aave-v3": {
-        "Base": {
-          "tokensIn": ["USDC"],
-          "tokensOut": ["aETH", "aUSDC"]
-        },
-        "Optimism": {
-          "tokensIn": ["DAI", "WETH"],
-          "tokensOut": ["aETH", "aDAI", "aWETH"]
-        },
-        "Mainnet": {
-          "tokensIn": ["WETH", "USDC"],
-          "tokensOut": ["aWETH", "aWETH", "aUSDC"]
-        }
-      },
       "dummy-lending": {
         "Monad": {
-          "tokensIn": ["USDC"],
+          "tokensIn": ["USDC", "USDT", "DAI"],
+          "tokensOut": []
+        },
+        "Mainnet": {
+          "tokensIn": ["USDC", "USDT", "DAI"],
+          "tokensOut": []
+        },
+        "Optimism": {
+          "tokensIn": ["USDC", "USDT", "DAI"],
+          "tokensOut": []
+        },
+        "Base": {
+          "tokensIn": ["USDC", "USDT", "DAI"],
           "tokensOut": []
         }
       },
 
       "uniswap-v3": {
         "Base": {
-          "tokensInAndOut": ["WETH", "USDC"]
+          "tokensInAndOut": ["USDC", "USDT", "DAI"]
         },
         "Optimism": {
-          "tokensInAndOut": ["WETH", "USDC"]
+          "tokensInAndOut": ["USDC", "USDT", "DAI"]
         },
         "Mainnet": {
-          "tokensInAndOut": ["WETH", "USDC", "DAI"]
+          "tokensInAndOut": ["USDC", "USDT", "DAI"]
         },
         "Monad": {
-          "tokensInAndOut": ["WETH", "USDC"]
+          "tokensInAndOut": ["USDC", "USDT", "DAI"]
         }
       },
       "FillerCrossChain": {
@@ -125,7 +132,7 @@
       }
     },
     "tokenChains": {
-      "DAI": ["Base", "Optimism", "Mainnet"],
+      "DAI": ["Base", "Optimism", "Mainnet", "Monad"],
       "USDC": ["Base", "Optimism", "Mainnet", "Monad"],
       "WETH": ["Base", "Optimism", "Mainnet", "Monad"]
     }
