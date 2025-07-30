@@ -916,27 +916,20 @@
   resolved "https://registry.npmjs.org/@metamask/delegation-abis/-/delegation-abis-0.11.0.tgz#a87741512f954aad0aa134a3c7a52f093014687b"
   integrity sha512-tnNGFDLQ5jfgPhHJaT5JwvF759nja1iGAG00REbk1Ufir+TxjxTmF8L9MbJifZmUh4fnyqV4Ik6NAOYVNBPVBg==
 
-"@metamask/delegation-deployments@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.npmjs.org/@metamask/delegation-deployments/-/delegation-deployments-0.11.0.tgz#fa7a223232d86203f35213c6cca64cdce61a8a2c"
-  integrity sha512-RfeMr1Ct0givG7oOy1unwdb5lGttq9pape4OGz2mk8quG0KDqDi7cw3fzYc7wz9xFDZ2YrFanYRacaLTlqWS8g==
+"@metamask/delegation-deployments@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.npmjs.org/@metamask/delegation-deployments/-/delegation-deployments-0.12.0.tgz#d2c33ca7901326df71382b340cc4017b38db7c73"
+  integrity sha512-9SB5DhLAnbpIWbFxP3UKPXLhCt8iiRjBBjZ7hqF5dMXy9buBEDpCRg+FJYRxYRecwporrTVrv+NfKUyCbL2ncw==
 
-"@metamask/delegation-toolkit@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.npmjs.org/@metamask/delegation-toolkit/-/delegation-toolkit-0.11.0.tgz#5aa1c204b64e13f52274e5dfdb33594f399b409b"
-  integrity sha512-KQybftUahuPPjN842ejmVaJWg2rzHpSpvd+b6qtiOBypzJs7cgw1/f8QalHLugS1eyicEYLXwvRxjjufiG4wbg==
-  dependencies:
-    "@metamask/delegation-utils" "^0.11.0"
-    webauthn-p256 "^0.0.5"
-
-"@metamask/delegation-utils@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.npmjs.org/@metamask/delegation-utils/-/delegation-utils-0.11.0.tgz#616ccc5528ab483937eb1138e982376da3d0ef4a"
-  integrity sha512-eg8icyDtbzwER/G3VvaiVUNiNr9GXxJXQMcFRbhm9tTMqWXpphYXk9edSungRF+QqYmXIytRiR2ChSHp0uNtew==
+"@metamask/delegation-toolkit@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.npmjs.org/@metamask/delegation-toolkit/-/delegation-toolkit-0.12.0.tgz#eb7dbc28577cf4b0086b6f79f7254ba28e4111d0"
+  integrity sha512-vk6X4iTARLpMdES6CYiABYSOpeXYPzCKV3xDOP/nRbnFp/CxeYQBa/fT28SDj318V92CQzCI6WrKlEnF/9Y/1Q==
   dependencies:
     "@metamask/delegation-abis" "^0.11.0"
-    "@metamask/delegation-deployments" "^0.11.0"
+    "@metamask/delegation-deployments" "^0.12.0"
     buffer "^6.0.3"
+    webauthn-p256 "^0.0.10"
 
 "@noble/ciphers@^1.3.0":
   version "1.3.0"
@@ -3434,10 +3427,10 @@ walker@^1.0.8:
   dependencies:
     makeerror "1.0.12"
 
-webauthn-p256@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.npmjs.org/webauthn-p256/-/webauthn-p256-0.0.5.tgz#0baebd2ba8a414b21cc09c0d40f9dd0be96a06bd"
-  integrity sha512-drMGNWKdaixZNobeORVIqq7k5DsRC9FnG201K2QjeOoQLmtSDaSsVZdkg6n5jUALJKcAG++zBPJXmv6hy0nWFg==
+webauthn-p256@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.npmjs.org/webauthn-p256/-/webauthn-p256-0.0.10.tgz#877e75abe8348d3e14485932968edf3325fd2fdd"
+  integrity sha512-EeYD+gmIT80YkSIDb2iWq0lq2zbHo1CxHlQTeJ+KkCILWpVy3zASH3ByD4bopzfk0uCwXxLqKGLqp2W4O28VFA==
   dependencies:
     "@noble/curves" "^1.4.0"
     "@noble/hashes" "^1.4.0"

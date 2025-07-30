@@ -10,6 +10,7 @@ import {
   Account,
   encodeFunctionData,
   publicActions,
+  toHex,
 } from "viem";
 import { SignAuthorizationReturnType } from "viem/_types/accounts/utils/signAuthorization";
 import { privateKeyToAccount } from "viem/accounts";
@@ -42,7 +43,6 @@ import { getProvider } from "../web3";
 import safe7702ProxyFactoryAbi from "./abis/safe7702ProxyFactoryAbi";
 import safeProxyFactoryAbi from "./abis/safeProxyFactoryAbi";
 import {
-  DeployParams,
   Implementation,
   toMetaMaskSmartAccount,
 } from "@metamask/delegation-toolkit";
@@ -124,20 +124,45 @@ export const calculateProxyAddress = async (
 
 export const getMetamaskDelegatorInstance = async (
   userAddress: string,
-  userSigner: WalletClient
+  userSigner: WalletClient,
+  is7702?: boolean,
+  isPasskey?: boolean,
+  passkey?: any
 ) => {
   const walletClientwithPublic = userSigner.extend(publicActions);
-  const deployParams: DeployParams<Implementation.Hybrid> = [
-    userAddress as `0x${string}`,
-    [],
-    [],
-    [],
-  ];
+  const deployParams = [userAddress as `0x${string}`, [], [], []];
+
+  if (is7702) {
+    return await toMetaMaskSmartAccount({
+      client: walletClientwithPublic,
+      implementation: Implementation.Stateless7702,
+      address: userAddress as `0x${string}`,
+      signatory: { walletClient: walletClientwithPublic as any },
+    });
+  }
+
+  if (isPasskey) {
+    return await toMetaMaskSmartAccount({
+      client: walletClientwithPublic,
+      implementation: Implementation.Hybrid,
+      deployParams: [
+        userAddress as `0x${string}`,
+        [passkey.credential.id],
+        [passkey.publicKey.x],
+        [passkey.publicKey.y],
+      ],
+      deploySalt: "0x",
+      signatory: {
+        webAuthnAccount: passkey.webAuthnAccount,
+        keyId: toHex(passkey.credential.id),
+      },
+    });
+  }
 
   return await toMetaMaskSmartAccount({
     client: walletClientwithPublic,
     implementation: Implementation.Hybrid,
-    deployParams,
+    deployParams: deployParams as any,
     deploySalt: "0x",
     signatory: { walletClient: walletClientwithPublic as any },
   });
@@ -158,15 +183,11 @@ export const getCreateWalletData = async (
     }
     const delegatorSmartAccount = await getMetamaskDelegatorInstance(
       userAddress,
-      options?.userSigner as WalletClient
+      options?.userSigner as WalletClient,
+      options.is7702
     );
     console.log("delegatorSmartAccount: ", delegatorSmartAccount);
-    const deployParams: DeployParams<Implementation.Hybrid> = [
-      userAddress as `0x${string}`,
-      [],
-      [],
-      [],
-    ];
+    const deployParams = [userAddress as `0x${string}`, [], [], []];
     console.log("deployParams: ", deployParams);
     return {
       txnData: {
@@ -178,7 +199,7 @@ export const getCreateWalletData = async (
       initializerData: encodeFunctionData({
         abi: delegatorSmartAccount.abi,
         functionName: "initialize",
-        args: deployParams,
+        args: deployParams as any,
       }),
       isAlreadyDeployed: await delegatorSmartAccount.isDeployed(),
     };
