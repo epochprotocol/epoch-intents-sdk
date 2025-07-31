@@ -19,13 +19,16 @@ import * as chains from "viem/chains";
 import {
   EIP7702_SAFE_PROXY_ADDRESS,
   EPOCH_MODULE_SAFE_ADDRESS,
-  EPOCH_MODULE_SETUP,
+  EPOCH_SAFE_INIT_SETUP,
+  FCLP256Verifier,
   RPC_ENDPOINTS,
   SAFE_7579_MODULE_ADDRESS,
   SAFE_7579_REGISTRY_ADDRESS,
   SAFE_7702_SINGLETON_ADDRESS,
+  SAFE_INIT_SETUP_FORWARDER,
   SAFE_PROXY_FACTORY_ADDRESS,
   SAFE_SINGLETON_ADDRESS,
+  SAFE_WEBAUTHN_SHARED_SIGNER,
 } from "../constants";
 import {
   getAuthorizationList,
@@ -207,43 +210,39 @@ export const getCreateWalletData = async (
     const { is7702 } = { ...options };
     const abiCoder = new ethers.utils.AbiCoder();
 
-    const safeOwners = [userAddress];
-    const salt = Math.floor(Math.random() * 100000000);
+    let safeOwners = [userAddress];
+    const salt = 123665432;
 
-    const erc7579Data = abiCoder.encode(
-      [
-        "tuple[]",
-        "tuple[]",
-        "tuple[]",
-        "tuple[]",
-        "tuple(address registry, address[] attesters, uint256 threshold)",
-      ],
-      [
-        [],
-        [],
-        [],
-        [],
-        {
-          registry: SAFE_7579_REGISTRY_ADDRESS[chainId],
-          attesters: [],
-          threshold: 0,
-        },
-      ]
-    );
-    const safeModuleSetupABI = [
-      "function enableModules(address moduleSetup, address module, bytes calldata initData, address moduleAddress)",
+    const safeInitSetupABI = [
+      "function forwardSetup(address safeInitSetup, bool triggerFaucet, bytes extraData)",
     ];
-    const safeModuleSetupInterface = new ethers.utils.Interface(
-      safeModuleSetupABI
-    );
-    const safeModuleSetupData = safeModuleSetupInterface.encodeFunctionData(
-      "enableModules",
-      [
-        SAFE_7579_MODULE_ADDRESS[chainId],
-        SAFE_7579_MODULE_ADDRESS[chainId],
-        erc7579Data,
-        EPOCH_MODULE_SAFE_ADDRESS[chainId],
-      ]
+    const safeInitSetupInterface = new ethers.utils.Interface(safeInitSetupABI);
+
+    let extraData = "0x";
+
+    if (options?.passkey) {
+      safeOwners = [SAFE_WEBAUTHN_SHARED_SIGNER[chainId]];
+      const signer = {
+        x: options?.passkey?.publicKey.x,
+        y: options?.passkey?.publicKey.y,
+        verifiers: FCLP256Verifier[chainId],
+      };
+      const signerData = abiCoder.encode(
+        ["tuple(bytes32 x, bytes32 y, uint176 verifiers)"],
+        [
+          {
+            x: signer.x,
+            y: signer.y,
+            verifiers: signer.verifiers,
+          },
+        ]
+      );
+      extraData = signerData;
+    }
+
+    const safeInitSetupData = safeInitSetupInterface.encodeFunctionData(
+      "forwardSetup",
+      [EPOCH_SAFE_INIT_SETUP[chainId], true, extraData]
     );
 
     const safeSetupABI = [
@@ -253,8 +252,8 @@ export const getCreateWalletData = async (
     const initializerData = safeSetupInterface.encodeFunctionData("setup", [
       safeOwners,
       1,
-      EPOCH_MODULE_SETUP[chainId],
-      safeModuleSetupData,
+      SAFE_INIT_SETUP_FORWARDER[chainId],
+      safeInitSetupData,
       ethers.constants.AddressZero,
       ethers.constants.AddressZero,
       0,

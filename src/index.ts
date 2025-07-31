@@ -5,6 +5,7 @@ import { WalletClient } from "viem";
 import {
   Calldata,
   Config,
+  CreateWalletData,
   CreateWalletOptions,
   Intent,
   NonceResponse,
@@ -40,6 +41,20 @@ export const EpochIntents = (config: Config) => {
      */
     encodeTask: (task: Task): string => {
       return encodeBase64(task);
+    },
+
+    getCreateWalletData: async (
+      userAddress: string,
+      chainId: number,
+      walletType: WalletType,
+      options?: CreateWalletOptions
+    ): Promise<CreateWalletData> => {
+      return await getCreateWalletData(
+        userAddress,
+        chainId,
+        walletType,
+        options
+      );
     },
 
     createWallet: async (
@@ -307,19 +322,6 @@ export const EpochIntents = (config: Config) => {
         from: metamaskDelegatorInstance.address,
         caveats: [], // Empty caveats array - we recommend adding appropriate restrictions.
       });
-
-      const environment = metamaskDelegatorInstance.environment;
-      const caveatBuilder = createCaveatBuilder(environment);
-      const caveats = caveatBuilder
-        .addCaveat("allowedTargets", [
-          "0xc11F3a8E5C7D16b75c9E2F60d26f5321C6Af5E92",
-        ])
-        .addCaveat("allowedMethods", [
-          "approve(address,uint256)",
-          "transfer(address,uint256)",
-        ])
-        .addCaveat("limitedCalls", 1)
-        .build();
 
       const signature = await metamaskDelegatorInstance.signDelegation({
         delegation,

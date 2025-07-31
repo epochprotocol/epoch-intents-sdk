@@ -66,6 +66,7 @@ export enum WalletType {
 export type CreateWalletOptions = {
   is7702?: boolean;
   userSigner?: ethers.VoidSigner | ethers.Signer | WalletClient;
+  passkey?: any;
 };
 
 export type AuthorizationListEntryAny = {
