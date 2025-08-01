@@ -4,7 +4,7 @@
     "": {
       "name": "epoch-intents-sdk",
       "dependencies": {
-        "@metamask/delegation-toolkit": "^0.11.0",
+        "@metamask/delegation-toolkit": "^0.12.0",
         "axios": "^1.6.7",
         "ethers": "^5.8.0",
         "viem": "2.x",
@@ -214,11 +214,9 @@
 
     "@metamask/delegation-abis": ["@metamask/delegation-abis@0.11.0", "", {}, "sha512-tnNGFDLQ5jfgPhHJaT5JwvF759nja1iGAG00REbk1Ufir+TxjxTmF8L9MbJifZmUh4fnyqV4Ik6NAOYVNBPVBg=="],
 
-    "@metamask/delegation-deployments": ["@metamask/delegation-deployments@0.11.0", "", {}, "sha512-RfeMr1Ct0givG7oOy1unwdb5lGttq9pape4OGz2mk8quG0KDqDi7cw3fzYc7wz9xFDZ2YrFanYRacaLTlqWS8g=="],
+    "@metamask/delegation-deployments": ["@metamask/delegation-deployments@0.12.0", "", {}, "sha512-9SB5DhLAnbpIWbFxP3UKPXLhCt8iiRjBBjZ7hqF5dMXy9buBEDpCRg+FJYRxYRecwporrTVrv+NfKUyCbL2ncw=="],
 
-    "@metamask/delegation-toolkit": ["@metamask/delegation-toolkit@0.11.0", "", { "dependencies": { "@metamask/delegation-utils": "^0.11.0", "webauthn-p256": "^0.0.5" }, "peerDependencies": { "viem": ">=2.18.2 <3.0.0" } }, "sha512-KQybftUahuPPjN842ejmVaJWg2rzHpSpvd+b6qtiOBypzJs7cgw1/f8QalHLugS1eyicEYLXwvRxjjufiG4wbg=="],
-
-    "@metamask/delegation-utils": ["@metamask/delegation-utils@0.11.0", "", { "dependencies": { "@metamask/delegation-abis": "^0.11.0", "@metamask/delegation-deployments": "^0.11.0", "buffer": "^6.0.3" }, "peerDependencies": { "viem": ">=2.18.2 <3.0.0" } }, "sha512-eg8icyDtbzwER/G3VvaiVUNiNr9GXxJXQMcFRbhm9tTMqWXpphYXk9edSungRF+QqYmXIytRiR2ChSHp0uNtew=="],
+    "@metamask/delegation-toolkit": ["@metamask/delegation-toolkit@0.12.0", "", { "dependencies": { "@metamask/delegation-abis": "^0.11.0", "@metamask/delegation-deployments": "^0.12.0", "buffer": "^6.0.3", "webauthn-p256": "^0.0.10" }, "peerDependencies": { "viem": ">=2.18.2 <3.0.0" } }, "sha512-vk6X4iTARLpMdES6CYiABYSOpeXYPzCKV3xDOP/nRbnFp/CxeYQBa/fT28SDj318V92CQzCI6WrKlEnF/9Y/1Q=="],
 
     "@noble/curves": ["@noble/curves@1.8.2", "", { "dependencies": { "@noble/hashes": "1.7.2" } }, "sha512-vnI7V6lFNe0tLAuJMu+2sX+FcL14TaCWy1qiczg1VwRmPrpQCdq5ESXQMqUc2tluRNf6irBXrWbl1mGN8uaU/g=="],
 
@@ -848,7 +846,7 @@
 
     "walker": ["walker@1.0.8", "", { "dependencies": { "makeerror": "1.0.12" } }, "sha512-ts/8E8l5b7kY0vlWLewOkDXMmPdLcVV4GmOQLyxuSswIJsweeFZtAsMF7k1Nszz+TYBQrlYRmzOnr398y1JemQ=="],
 
-    "webauthn-p256": ["webauthn-p256@0.0.5", "", { "dependencies": { "@noble/curves": "^1.4.0", "@noble/hashes": "^1.4.0" } }, "sha512-drMGNWKdaixZNobeORVIqq7k5DsRC9FnG201K2QjeOoQLmtSDaSsVZdkg6n5jUALJKcAG++zBPJXmv6hy0nWFg=="],
+    "webauthn-p256": ["webauthn-p256@0.0.10", "", { "dependencies": { "@noble/curves": "^1.4.0", "@noble/hashes": "^1.4.0" } }, "sha512-EeYD+gmIT80YkSIDb2iWq0lq2zbHo1CxHlQTeJ+KkCILWpVy3zASH3ByD4bopzfk0uCwXxLqKGLqp2W4O28VFA=="],
 
     "which": ["which@2.0.2", "", { "dependencies": { "isexe": "^2.0.0" }, "bin": { "node-which": "./bin/node-which" } }, "sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA=="],
 

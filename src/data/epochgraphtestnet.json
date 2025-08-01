@@ -11,13 +11,19 @@
 
     "dummy-lending": {
       "contractAddress": {
-        "Monad": "0xMorphoMonadAddress"
+        "Monad": "0xMorphoMonadAddress",
+        "Mainnet": "0xMorphoMainnetAddress",
+        "Optimism": "0xMorphoOptimismAddress",
+        "Base": "0xMorphoBaseAddress"
       },
       "type": ["lending", "yield"]
     },
     "dummy-staking": {
       "contractAddress": {
-        "Monad": "0xMorphoMonadAddress"
+        "Monad": "0xMorphoMonadAddress",
+        "Mainnet": "0xMorphoMainnetAddress",
+        "Optimism": "0xMorphoOptimismAddress",
+        "Base": "0xMorphoBaseAddress"
       },
       "type": ["staking"]
     },
@@ -112,6 +118,18 @@
       },
       "dummy-staking": {
         "Monad": {
+          "tokensIn": ["USDC", "USDT", "DAI"],
+          "tokensOut": []
+        },
+        "Mainnet": {
+          "tokensIn": ["USDC", "USDT", "DAI"],
+          "tokensOut": []
+        },
+        "Optimism": {
+          "tokensIn": ["USDC", "USDT", "DAI"],
+          "tokensOut": []
+        },
+        "Base": {
           "tokensIn": ["USDC", "USDT", "DAI"],
           "tokensOut": []
         }
