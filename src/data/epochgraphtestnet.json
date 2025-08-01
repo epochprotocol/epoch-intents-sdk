@@ -15,7 +15,12 @@
       },
       "type": ["lending", "yield"]
     },
-
+    "dummy-staking": {
+      "contractAddress": {
+        "Monad": "0xMorphoMonadAddress"
+      },
+      "type": ["staking"]
+    },
     "uniswap-v3": {
       "contractAddress": {
         "Base": "0xMorphoBaseAddress",
@@ -105,7 +110,12 @@
           "tokensOut": []
         }
       },
-
+      "dummy-staking": {
+        "Monad": {
+          "tokensIn": ["USDC", "USDT", "DAI"],
+          "tokensOut": []
+        }
+      },
       "uniswap-v3": {
         "Base": {
           "tokensInAndOut": ["USDC", "USDT", "DAI"]
