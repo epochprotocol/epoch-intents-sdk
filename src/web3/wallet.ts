@@ -93,6 +93,7 @@ export const calculateProxyAddress = async (
     if (!options?.safeOptions) {
       throw new Error("Safe options are required");
     }
+
     const salt = ethers.utils.solidityKeccak256(
       ["bytes32", "uint256"],
       [
@@ -103,18 +104,16 @@ export const calculateProxyAddress = async (
         options.safeOptions.nonce,
       ]
     );
+
     const factoryAddress = options.safeOptions.factory.address;
     const proxyCreationCode =
       await options.safeOptions.factory.proxyCreationCode();
 
     const deploymentCode = ethers.utils.solidityPack(
-      ["bytes", "uint256", "uint256"],
-      [
-        proxyCreationCode,
-        ethers.utils.keccak256(options.safeOptions.inititalizer),
-        options.safeOptions.singleton,
-      ]
+      ["bytes", "uint256"],
+      [proxyCreationCode, options.safeOptions.singleton]
     );
+
     return ethers.utils.getCreate2Address(
       factoryAddress,
       salt,
@@ -270,7 +269,7 @@ export const getCreateWalletData = async (
           ? SAFE_7702_SINGLETON_ADDRESS[chainId]
           : SAFE_SINGLETON_ADDRESS[chainId],
         inititalizer: initializerData,
-        nonce: 0,
+        nonce: salt,
       },
     });
 
@@ -298,7 +297,7 @@ export const getCreateWalletData = async (
         await safeEIP7702ProxyFactory.populateTransaction.createProxyWithNonce(
           SAFE_7702_SINGLETON_ADDRESS[chainId],
           initializerData,
-          0
+          salt
         );
 
       if (!proxyData.data) {
