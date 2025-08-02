@@ -6,7 +6,7 @@ export const RPC_ENDPOINTS: { [key: number]: string } = {
   84532:
     "https://rpc.ankr.com/base_sepolia/328f2943cccedcece01572bbf49bebb41a773bca7c6d1fdea5ca239f55e72a5b",
   10143:
-    "https://rpc.ankr.com/base_sepolia/328f2943cccedcece01572bbf49bebb41a773bca7c6d1fdea5ca239f55e72a5b",
+    "https://rpc.ankr.com/monad_testnet/328f2943cccedcece01572bbf49bebb41a773bca7c6d1fdea5ca239f55e72a5b",
 };
 
 export const INTENT_REGISTRY_ADDRESS: { [key: number]: string } = {
@@ -102,6 +102,13 @@ export const METAMASK_EXEC_MANAGER: { [key: number]: string } = {
   10143: "0x0490e762ACD0341Aa47e191A0DBD6C6864f5E333",
 };
 
+export const EPOCH_ESCROW_ADDRESS: { [key: number]: string } = {
+  11155111: "0x886328200bdeF82cA09CDd12A1c1f15525C708dA",
+  11155420: "0x886328200bdeF82cA09CDd12A1c1f15525C708dA",
+  84532: "0x886328200bdeF82cA09CDd12A1c1f15525C708dA",
+  10143: "0x886328200bdeF82cA09CDd12A1c1f15525C708dA",
+};
+
 export const DEFAULT_CHAIN_ID = 10;
 
 export const CONTRACT_ADDRESSES: { [key: string]: { [key: number]: string } } =
@@ -119,4 +126,5 @@ export const CONTRACT_ADDRESSES: { [key: string]: { [key: number]: string } } =
     SAFE_INIT_SETUP_FORWARDER,
     SAFE_WEBAUTHN_SHARED_SIGNER,
     FCLP256Verifier,
+    EPOCH_ESCROW_ADDRESS,
   };
