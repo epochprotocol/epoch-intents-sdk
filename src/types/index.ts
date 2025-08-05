@@ -274,6 +274,7 @@ export interface ExecutionTransactionWithEventData {
   transaction: ExecutionTransaction[];
   eventData: EventData;
   approvals: IntermediaryApprovals[];
+  fillerTokenDatas: FillerTokenData[];
 }
 
 export interface CalldataReturnInterface {
@@ -311,3 +312,13 @@ export interface IntentQuoteInterface {
   /// or any other order-type specific information
   orderData: string;
 }
+
+export type FillerTokenData = {
+  filler: string;
+  user: string;
+  token: string;
+  amount: string;
+  nonce: string;
+  fillChainId: string;
+  redeemChainId: string;
+};
