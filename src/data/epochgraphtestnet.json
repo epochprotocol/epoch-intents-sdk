@@ -25,7 +25,7 @@
         "Optimism": "0xMorphoOptimismAddress",
         "Base": "0xMorphoBaseAddress"
       },
-      "type": ["staking"]
+      "type": ["staking", "yield"]
     },
     "uniswap-v3": {
       "contractAddress": {
