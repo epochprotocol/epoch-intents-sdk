@@ -322,3 +322,23 @@ export type FillerTokenData = {
   fillChainId: string;
   redeemChainId: string;
 };
+
+export enum TransactionStatus {
+  PENDING = "pending",
+  SUCCESS = "success",
+  FAILED = "failed",
+}
+
+export type QueuedTransactionForIntent = {
+  nonce: string;
+  transactions: ExecutionTransaction[];
+  chainId: number;
+  userSCWalletAddress: string;
+  intentNonce: string;
+  approvals: IntermediaryApprovals[];
+  fillerTokenDatas: FillerTokenData[];
+  addAndExecute: boolean;
+  status: TransactionStatus;
+  dependenciesTransactions: string[];
+  transactionHash: string | null;
+};
