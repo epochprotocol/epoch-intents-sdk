@@ -41,7 +41,7 @@ export type Task = {
 export type NonceResponse = {
   nonce: string;
 };
-
+//suggested by advice of @manank
 export type SolveIntentResponse = {
   success: boolean;
   path: Path[];
