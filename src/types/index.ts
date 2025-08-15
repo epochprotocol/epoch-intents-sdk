@@ -44,8 +44,7 @@ export type NonceResponse = {
 
 export type SolveIntentResponse = {
   success: boolean;
-  transactionHash: string;
-  path: Path;
+  path: Path[];
 };
 
 export type ErrorResponse = {
