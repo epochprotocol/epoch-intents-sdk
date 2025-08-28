@@ -8,13 +8,16 @@
       },
       "type": ["lending", "yield"]
     },
-
     "dummy-lending": {
       "contractAddress": {
         "Monad": "0xMorphoMonadAddress",
         "Mainnet": "0xMorphoMainnetAddress",
         "Optimism": "0xMorphoOptimismAddress",
-        "Base": "0xMorphoBaseAddress"
+        "Base": "0xMorphoBaseAddress",
+        "Sepolia": "0xMorphoSepoliaAddress",
+        "Polygon": "0xMorphoPolygonAddress",
+        "Tatara": "0xMorphoTataraAddress",
+        "Rise": "0xMorphoRiseAddress"
       },
       "type": ["lending", "yield"]
     },
@@ -23,7 +26,10 @@
         "Monad": "0xMorphoMonadAddress",
         "Mainnet": "0xMorphoMainnetAddress",
         "Optimism": "0xMorphoOptimismAddress",
-        "Base": "0xMorphoBaseAddress"
+        "Base": "0xMorphoBaseAddress",
+        "Polygon": "0xMorphoPolygonAddress",
+        "Tatara": "0xMorphoTataraAddress",
+        "Rise": "0xMorphoRiseAddress"
       },
       "type": ["staking", "yield"]
     },
@@ -32,7 +38,8 @@
         "Base": "0xMorphoBaseAddress",
         "Optimism": "0xMorphoOptimismAddress",
         "Mainnet": "0xMorphoMainnetAddress",
-        "Monad": "0xMorphoMonadAddress"
+        "Monad": "0xMorphoMonadAddress",
+        "Polygon": "0xMorphoPolygonAddress"
       },
       "type": ["swap"]
     },
@@ -52,28 +59,37 @@
   "tokens": {
     "USDC": {
       "contractAddress": {
-        "Base": "0x3b8bA5DF76689f704d4C16f2011223AEf525F288",
-        "Optimism": "0x3b8bA5DF76689f704d4C16f2011223AEf525F288",
-        "Monad": "0x3b8bA5DF76689f704d4C16f2011223AEf525F288",
-        "Mainnet": "0x3b8bA5DF76689f704d4C16f2011223AEf525F288"
+        "Base": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69",
+        "Optimism": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69",
+        "Monad": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69",
+        "Mainnet": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69",
+        "Polygon": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69",
+        "Tatara": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69",
+        "Rise": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69"
       },
       "decimals": 18
     },
     "DAI": {
       "contractAddress": {
-        "Base": "0x64B02aA7C8befBc814505BB94Ea616bCA1B381d9",
-        "Optimism": "0x64B02aA7C8befBc814505BB94Ea616bCA1B381d9",
-        "Monad": "0x64B02aA7C8befBc814505BB94Ea616bCA1B381d9",
-        "Mainnet": "0x64B02aA7C8befBc814505BB94Ea616bCA1B381d9"
+        "Base": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a",
+        "Optimism": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a",
+        "Monad": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a",
+        "Mainnet": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a",
+        "Polygon": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a",
+        "Tatara": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a",
+        "Rise": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a"
       },
       "decimals": 18
     },
     "USDT": {
       "contractAddress": {
-        "Base": "0x2591d4C1760CDa6FC4fb51eAc1c4B0998D1F295A",
-        "Optimism": "0x2591d4C1760CDa6FC4fb51eAc1c4B0998D1F295A",
-        "Monad": "0x2591d4C1760CDa6FC4fb51eAc1c4B0998D1F295A",
-        "Mainnet": "0x2591d4C1760CDa6FC4fb51eAc1c4B0998D1F295A"
+        "Base": "0xc04d2869665Be874881133943523723Be5782720",
+        "Optimism": "0xc04d2869665Be874881133943523723Be5782720",
+        "Monad": "0xc04d2869665Be874881133943523723Be5782720",
+        "Mainnet": "0xc04d2869665Be874881133943523723Be5782720",
+        "Polygon": "0xc04d2869665Be874881133943523723Be5782720",
+        "Tatara": "0xc04d2869665Be874881133943523723Be5782720",
+        "Rise": "0xc04d2869665Be874881133943523723Be5782720"
       },
       "decimals": 18
     },
@@ -82,7 +98,10 @@
         "Base": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A",
         "Optimism": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A",
         "Monad": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A",
-        "Mainnet": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A"
+        "Mainnet": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A",
+        "Polygon": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A",
+        "Tatara": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A",
+        "Rise": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A"
       },
       "decimals": 18
     },
@@ -91,7 +110,10 @@
         "Base": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9",
         "Optimism": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9",
         "Monad": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9",
-        "Mainnet": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9"
+        "Mainnet": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9",
+        "Polygon": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9",
+        "Tatara": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9",
+        "Rise": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9"
       },
       "decimals": 18
     },
@@ -100,7 +122,10 @@
         "Base": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C",
         "Optimism": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C",
         "Monad": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C",
-        "Mainnet": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C"
+        "Mainnet": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C",
+        "Polygon": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C",
+        "Tatara": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C",
+        "Rise": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C"
       },
       "decimals": 18
     },
@@ -109,7 +134,10 @@
         "Base": "0xB588418c0f90F07Bc9587d0050845a90C23C7502",
         "Optimism": "0xB588418c0f90F07Bc9587d0050845a90C23C7502",
         "Monad": "0xB588418c0f90F07Bc9587d0050845a90C23C7502",
-        "Mainnet": "0xB588418c0f90F07Bc9587d0050845a90C23C7502"
+        "Mainnet": "0xB588418c0f90F07Bc9587d0050845a90C23C7502",
+        "Polygon": "0xB588418c0f90F07Bc9587d0050845a90C23C7502",
+        "Tatara": "0xB588418c0f90F07Bc9587d0050845a90C23C7502",
+        "Rise": "0xB588418c0f90F07Bc9587d0050845a90C23C7502"
       },
       "decimals": 18
     },
@@ -118,7 +146,10 @@
         "Base": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD",
         "Optimism": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD",
         "Monad": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD",
-        "Mainnet": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD"
+        "Mainnet": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD",
+        "Polygon": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD",
+        "Tatara": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD",
+        "Rise": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD"
       },
       "decimals": 18
     },
@@ -127,7 +158,10 @@
         "Base": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0",
         "Optimism": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0",
         "Monad": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0",
-        "Mainnet": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0"
+        "Mainnet": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0",
+        "Polygon": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0",
+        "Tatara": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0",
+        "Rise": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0"
       },
       "decimals": 18
     }
@@ -148,6 +182,18 @@
     "Monad": {
       "chainId": 10143,
       "explorer": "https://testnet.monadexplorer.com/"
+    },
+    "Polygon": {
+      "chainId": 80002,
+      "explorer": "https://amoy.polygonscan.com"
+    },
+    "Tatara": {
+      "chainId": 129399,
+      "explorer": "https://explorer.tatara.katana.network"
+    },
+    "Rise": {
+      "chainId": 11155931,
+      "explorer": "https://explorer.testnet.riselabs.xyz"
     }
   },
   "relationships": {
@@ -208,6 +254,48 @@
             "FERB"
           ],
           "tokensOut": []
+        },
+        "Polygon": {
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC",
+            "PENGU",
+            "OSWALD",
+            "KICK",
+            "FERB"
+          ],
+          "tokensOut": []
+        },
+        "Tatara": {
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC",
+            "PENGU",
+            "OSWALD",
+            "KICK",
+            "FERB"
+          ],
+          "tokensOut": []
+        },
+        "Rise": {
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC",
+            "PENGU",
+            "OSWALD",
+            "KICK",
+            "FERB"
+          ],
+          "tokensOut": []
         }
       },
       "dummy-staking": {
@@ -224,6 +312,18 @@
           "tokensOut": []
         },
         "Base": {
+          "tokensIn": ["USDC", "USDT", "DAI", "WETH", "WBTC"],
+          "tokensOut": []
+        },
+        "Polygon": {
+          "tokensIn": ["USDC", "USDT", "DAI", "WETH", "WBTC"],
+          "tokensOut": []
+        },
+        "Tatara": {
+          "tokensIn": ["USDC", "USDT", "DAI", "WETH", "WBTC"],
+          "tokensOut": []
+        },
+        "Rise": {
           "tokensIn": ["USDC", "USDT", "DAI", "WETH", "WBTC"],
           "tokensOut": []
         }
@@ -280,6 +380,19 @@
             "KICK",
             "FERB"
           ]
+        },
+        "Polygon": {
+          "tokensInAndOut": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC",
+            "PENGU",
+            "OSWALD",
+            "KICK",
+            "FERB"
+          ]
         }
       },
       "FillerCrossChain": {
@@ -294,9 +407,78 @@
       }
     },
     "tokenChains": {
-      "DAI": ["Base", "Optimism", "Mainnet", "Monad"],
-      "USDC": ["Base", "Optimism", "Mainnet", "Monad"],
-      "WETH": ["Base", "Optimism", "Mainnet", "Monad"]
+      "DAI": [
+        "Base",
+        "Optimism",
+        "Mainnet",
+        "Monad",
+        "Polygon",
+        "Tatara",
+        "Rise"
+      ],
+      "USDC": [
+        "Base",
+        "Optimism",
+        "Mainnet",
+        "Monad",
+        "Polygon",
+        "Tatara",
+        "Rise"
+      ],
+      "WETH": [
+        "Base",
+        "Optimism",
+        "Mainnet",
+        "Monad",
+        "Polygon",
+        "Tatara",
+        "Rise"
+      ],
+      "WBTC": [
+        "Base",
+        "Optimism",
+        "Mainnet",
+        "Monad",
+        "Polygon",
+        "Tatara",
+        "Rise"
+      ],
+      "PENGU": [
+        "Base",
+        "Optimism",
+        "Mainnet",
+        "Monad",
+        "Polygon",
+        "Tatara",
+        "Rise"
+      ],
+      "OSWALD": [
+        "Base",
+        "Optimism",
+        "Mainnet",
+        "Monad",
+        "Polygon",
+        "Tatara",
+        "Rise"
+      ],
+      "KICK": [
+        "Base",
+        "Optimism",
+        "Mainnet",
+        "Monad",
+        "Polygon",
+        "Tatara",
+        "Rise"
+      ],
+      "FERB": [
+        "Base",
+        "Optimism",
+        "Mainnet",
+        "Monad",
+        "Polygon",
+        "Tatara",
+        "Rise"
+      ]
     }
   }
 }
