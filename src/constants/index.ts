@@ -7,6 +7,10 @@ export const RPC_ENDPOINTS: { [key: number]: string } = {
     "https://rpc.ankr.com/base_sepolia/328f2943cccedcece01572bbf49bebb41a773bca7c6d1fdea5ca239f55e72a5b",
   10143:
     "https://rpc.ankr.com/monad_testnet/328f2943cccedcece01572bbf49bebb41a773bca7c6d1fdea5ca239f55e72a5b",
+  80002:
+    "https://rpc.ankr.com/polygon_amoy/328f2943cccedcece01572bbf49bebb41a773bca7c6d1fdea5ca239f55e72a5b",
+  129399: "https://rpc.tatara.katanarpc.com/",
+  11155931: "https://testnet.riselabs.xyz",
 };
 
 export const INTENT_REGISTRY_ADDRESS: { [key: number]: string } = {
