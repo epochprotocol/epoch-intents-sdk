@@ -185,7 +185,7 @@ export const SAFE_MULTISEND_CALL_ONLY_ADDRESS: { [key: number]: string } = {
   11155931: "0x944b129a384265D916fbEA3440CD2caA4925145c",
 };
 
-export const DEFAULT_CHAIN_ID = 10;
+export const DEFAULT_CHAIN_ID = 11155111;
 
 export const CONTRACT_ADDRESSES: { [key: string]: { [key: number]: string } } =
   {
