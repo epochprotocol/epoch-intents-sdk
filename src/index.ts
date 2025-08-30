@@ -209,12 +209,25 @@ export const EpochIntents = (config: Config) => {
       task: Task,
       approvals: Intent["approvals"],
       nonce?: string,
-      calldatas?: Calldata[]
+      calldatas?: Calldata[],
+      intentChainIds?: number[]
     ): Intent => {
       let chainIds: number[] = [];
-      approvals.forEach((approval) => {
-        chainIds.push(approval.chainId);
-      });
+      if (intentChainIds) {
+        chainIds = intentChainIds;
+      } else {
+        approvals.forEach((approval) => {
+          chainIds.push(approval.chainId);
+        });
+        task.chainIds?.forEach((chainIdPair) => {
+          chainIdPair.forEach((chainId) => {
+            chainIds.push(chainId);
+          });
+        });
+
+        chainIds = [...new Set(chainIds)];
+        chainIds.sort((a, b) => a - b);
+      }
 
       const constraint: Intent["constraint"] = {
         constraintData: "0x",
