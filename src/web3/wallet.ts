@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { BytesLike, ethers } from "ethers";
 import {
   createPublicClient,
   createWalletClient,
@@ -17,6 +17,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import * as chains from "viem/chains";
 
 import {
+  DEFAULT_CHAIN_ID,
   EIP7702_SAFE_PROXY_ADDRESS,
   EPOCH_MODULE_SAFE_ADDRESS,
   EPOCH_SAFE_INIT_SETUP,
@@ -49,6 +50,7 @@ import {
   Implementation,
   toMetaMaskSmartAccount,
 } from "@metamask/delegation-toolkit";
+import epochModuleAbi from "./abis/epochModuleAbi";
 
 export const getSafeProxyFactoryInstance = (
   chainId: number,
@@ -534,4 +536,24 @@ export const getProxyAddressFromReceipt = (
   }
 
   return proxyAddress;
+};
+
+export const validationEpochModuleSafeSignature = async (
+  sender: string,
+  data: BytesLike,
+  signature: string
+) => {
+  const epochModule = EPOCH_MODULE_SAFE_ADDRESS[DEFAULT_CHAIN_ID];
+  const provider = getProvider(DEFAULT_CHAIN_ID);
+  const epochModuleInstance = new ethers.Contract(
+    epochModule,
+    epochModuleAbi,
+    provider
+  );
+  const isValid = await epochModuleInstance.verifySignature(
+    sender,
+    data,
+    signature
+  );
+  return isValid;
 };

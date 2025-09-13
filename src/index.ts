@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ethers } from "ethers";
+import { BytesLike, ethers } from "ethers";
 import { WalletClient } from "viem";
 
 import {
@@ -21,6 +21,7 @@ import {
   getCreateWalletData,
   getMetamaskDelegatorInstance,
   set7702Delegator,
+  validationEpochModuleSafeSignature,
 } from "./web3/wallet";
 import {
   createCaveatBuilder,
@@ -346,6 +347,14 @@ export const EpochIntents = (config: Config) => {
       };
 
       return signedDelegation;
+    },
+
+    verifySignature: async (
+      sender: string,
+      data: BytesLike,
+      signature: string
+    ) => {
+      return await validationEpochModuleSafeSignature(sender, data, signature);
     },
 
     getDelegatorInstance: async (
