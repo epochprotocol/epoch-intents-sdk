@@ -1,0 +1,91 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_DEV }}
+
+      - name: Add server to known hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.SERVER_HOST_DEV }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          # Set project name - use workflow input if available, otherwise default
+          PROJECT_NAME="${{ github.event.repository.name }}"
+          BRANCH="${{ github.ref_name }}"
+
+          echo "Deploying project: $PROJECT_NAME on branch: $BRANCH"
+
+          # SSH into server and run deployment command
+          # Using nohup to ensure command continues after SSH disconnection
+          # Redirecting output to a log file for monitoring
+          LC_PROJECT_NAME=$PROJECT_NAME LC_BRANCH=$BRANCH ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_HOST_DEV }} << 'ENDSSH'
+            set -e
+            # Navigate to deployment directory
+            cd /home/ubuntu
+
+            # Create log directory if it doesn't exist
+            mkdir -p logs
+            
+            # Generate timestamp for log file
+            TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+            LOG_FILE="logs/deployment_${LC_PROJECT_NAME}_${TIMESTAMP}.log"
+            
+            echo "Starting deployment at $(date)" > $LOG_FILE
+            echo "Project: ${LC_PROJECT_NAME}" >> $LOG_FILE
+            echo "Branch: ${LC_BRANCH}" >> $LOG_FILE
+            echo "----------------------------------------" >> $LOG_FILE
+            
+            # Run deployment script with nohup to ensure it continues after SSH disconnection
+            # The script will run in background and output will be logged
+            nohup bash -c "
+              export PATH="/home/ubuntu/.nvm/versions/node/v22.18.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+              # Run the deployment script
+              ./deploy.sh '${LC_PROJECT_NAME}' '${LC_BRANCH}' 2>&1
+              
+              # Log completion
+              echo 'Deployment completed at $(date)' 
+              echo 'Process finished successfully'
+              
+              # Exit bash after completion
+              exit 0
+            " >> $LOG_FILE 2>&1 &
+            
+            # Get the process ID
+            DEPLOY_PID=$!
+            echo "Deployment started with PID: $DEPLOY_PID"
+            echo "Deployment PID: $DEPLOY_PID" >> $LOG_FILE
+            
+            # Wait a moment to ensure the process started properly
+            sleep 5
+            
+            # Check if process is still running (indicates successful start)
+            if kill -0 $DEPLOY_PID 2>/dev/null; then
+              echo "Deployment process is running successfully"
+              echo "Logs will be available at: $LOG_FILE"
+              echo "You can monitor progress with: tail -f $LOG_FILE"
+            else
+              echo "Warning: Deployment process may have finished quickly or encountered an error"
+              echo "Check the log file: $LOG_FILE"
+            fi
+            # The SSH session will end here, but the deployment continues
+            echo "SSH session ending - deployment continues in background"
+          ENDSSH
+
+          # These messages are shown after the SSH session ends, on the GitHub Actions runner
+          echo "Deployment initiated successfully!"
+          echo "The deployment process is now running on the server in the background."
