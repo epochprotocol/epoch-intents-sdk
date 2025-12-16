@@ -1,5 +1,13 @@
 {
   "protocols": {
+    "raffles": {
+      "contractAddress": {
+        "Base": "0xMorphoBaseAddress",
+        "Optimism": "0xMorphoOptimismAddress",
+        "Mainnet": "0xMorphoMainnetAddress"
+      },
+      "type": ["protocol-interaction"]
+    },
     "aave-v3": {
       "contractAddress": {
         "Base": "0xAaveBaseAddress",
@@ -210,6 +218,14 @@
   },
   "relationships": {
     "protocolTokensByChain": {
+      "protocol-interaction": {
+        "Base": {
+          "tokensInAndOut": ["WETH", "USDC", "DAI", "BAL", "POOL", "USDbC"]
+        },
+        "Optimism": {
+          "tokensInAndOut": ["WETH", "USDC", "DAI", "BAL", "POOL", "USDC.e"]
+        }
+      },
       "aave-v3": {
         "Base": {
           "tokensIn": ["WETH", "USDC", "DAI"],
