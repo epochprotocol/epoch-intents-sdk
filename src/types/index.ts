@@ -36,6 +36,7 @@ export type Task = {
   chainIds?: number[][];
   protocol?: string;
   recipient?: string;
+  extraData?: string;
 };
 
 export type NonceResponse = {
@@ -111,7 +112,7 @@ export interface IntentTaskData {
   tokens?: string[][];
   chainIds?: string[][];
   protocol?: string;
-  recipient?: string;
+  extraData?: any;
 }
 
 export type Protocol = {
