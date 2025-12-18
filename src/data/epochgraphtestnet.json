@@ -8,6 +8,13 @@
       },
       "type": ["lending", "yield"]
     },
+    "raffles": {
+      "contractAddress": {
+        "Base": "0xAaveBaseAddress",
+        "Mainnet": "0xAaveSepoliaAddress"
+      },
+      "type": ["protocol-interaction"]
+    },
     "dummy-lending": {
       "contractAddress": {
         "Monad": "0xMorphoMonadAddress",
@@ -42,6 +49,12 @@
         "Polygon": "0xMorphoPolygonAddress"
       },
       "type": ["swap"]
+    },
+    "FillerSwapAndBridge": {
+      "contractAddress": {
+        "*": "*"
+      },
+      "type": ["swapandbridge"]
     },
     "FillerSwap": {
       "contractAddress": {
@@ -198,6 +211,36 @@
   },
   "relationships": {
     "protocolTokensByChain": {
+      "raffles": {
+        "Base": {
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC",
+            "PENGU",
+            "OSWALD",
+            "KICK",
+            "FERB"
+          ],
+          "tokensOut": []
+        },
+        "Mainnet": {
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC",
+            "PENGU",
+            "OSWALD",
+            "KICK",
+            "FERB"
+          ],
+          "tokensOut": []
+        }
+      },
       "dummy-lending": {
         "Monad": {
           "tokensIn": [
@@ -401,6 +444,11 @@
         }
       },
       "FillerSwap": {
+        "*": {
+          "tokensInAndOut": ["*"]
+        }
+      },
+      "FillerSwapAndBridge": {
         "*": {
           "tokensInAndOut": ["*"]
         }
