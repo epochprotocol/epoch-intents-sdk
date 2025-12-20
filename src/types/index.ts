@@ -338,8 +338,14 @@ export type QueuedTransactionForIntent = {
   intentNonce: string;
   approvals: IntermediaryApprovals[];
   fillerTokenDatas: FillerTokenData[];
-  addAndExecute: boolean;
+  executionType: QueueExecutionType;
   status: TransactionStatus;
   dependenciesTransactions: string[];
   transactionHash: string | null;
 };
+
+export enum QueueExecutionType {
+  ADD_AND_EXECUTE = "addAndExecute",
+  ADD_INTENT = "addIntent",
+  SIMPLE_EXECUTION = "simpleExecution",
+}
