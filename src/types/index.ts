@@ -232,7 +232,7 @@ export interface QuoteReturnInterface {
   asset: string;
   tokenIn: string;
   tokenOut: string;
-  optionalData: string;
+  optionalData: any;
   quoteId: string;
   quoteData: string;
   callData: CalldataReturnInterface;
