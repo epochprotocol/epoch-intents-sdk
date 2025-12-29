@@ -23,7 +23,7 @@
     "@metamask/delegation-toolkit": "^0.12.0",
     "axios": "^1.6.7",
     "ethers": "^5.8.0",
-    "viem": "2.x"
+    "viem": "2.42.0"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
