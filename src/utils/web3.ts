@@ -7,69 +7,72 @@ import {
   AuthorizationListEntryAny,
 } from "../types";
 
-const formatNumber = (
-  _value: ethers.BigNumber | string | number
-): Uint8Array => {
-  const value = ethers.BigNumber.from(_value);
-  return ethers.utils.arrayify(value);
+const formatNumber = (_value: bigint | string | number): Uint8Array => {
+  const value = typeof _value === "bigint" ? _value : BigInt(_value);
+  // Convert bigint to hex string, then to bytes for RLP encoding
+  const hexValue = ethers.toBeHex(value);
+  return ethers.getBytes(hexValue);
 };
 
 export const encodeRLPAuthorizationEntryUnsigned = (
   chainId: number,
   address: any,
-  nonce: ethers.BigNumber
+  nonce: bigint
 ): string => {
   // MAGIC = "0x05" defined in ERC-7702
-  return ethers.utils.hexConcat([
+  return ethers.concat([
     "0x05",
-    ethers.utils.RLP.encode([
-      formatNumber(chainId),
-      address,
-      formatNumber(nonce),
-    ]),
+    ethers.encodeRlp([formatNumber(chainId), address, formatNumber(nonce)]),
   ]);
 };
 
 export const getAuthorizationList = async (
   chainId: number,
-  nonce: ethers.BigNumber,
+  nonce: bigint,
   authorizer: string,
-  signer: ethers.Signer | ethers.Wallet | ethers.VoidSigner
+  signer: ethers.Wallet | ethers.VoidSigner
 ): Promise<AuthorizationListEntryAny[]> => {
   const dataToSign = encodeRLPAuthorizationEntryUnsigned(
     chainId,
     authorizer,
     nonce
   );
-  const authHash = ethers.utils.keccak256(dataToSign);
+  const authHash = ethers.keccak256(dataToSign);
   // TODO: should be signDigest
   const sig = await signer.signMessage(authHash);
-  const authSignature = ethers.utils.splitSignature(sig);
+  // In ethers v6, splitSignature is removed, we need to parse manually
+  const sigBytes = ethers.getBytes(sig);
+  const r = ethers.hexlify(sigBytes.slice(0, 32));
+  const s = ethers.hexlify(sigBytes.slice(32, 64));
+  const v = sigBytes[64];
+  const yParity = v - 27;
 
   return [
     {
       chainId: chainId,
       address: authorizer,
       nonce: nonce,
-      yParity: authSignature.yParityAndS,
-      r: authSignature.r,
-      s: authSignature.s,
+      yParity: yParity,
+      r: r,
+      s: s,
     },
   ];
 };
 
 export const getSignedTransaction = async (
-  provider: ethers.providers.Provider,
-  relayer: ethers.utils.SigningKey,
+  provider: ethers.Provider,
+  relayer: ethers.SigningKey,
   authorizationList: SignAuthorizationReturnType | AuthorizationListEntryAny[],
-  to: string = ethers.constants.AddressZero,
-  value: ethers.BigNumber | number = 0,
+  to: string = ethers.ZeroAddress,
+  value: bigint | number = 0,
   data: string = "0x",
   nonce?: number
 ) => {
-  const relayerAddress = ethers.utils.computeAddress(relayer.publicKey);
+  const relayerAddress = ethers.computeAddress(relayer.publicKey);
   const relayerNonce =
     nonce || (await provider.getTransactionCount(relayerAddress));
+
+  const valueBigInt = typeof value === "bigint" ? value : BigInt(value);
 
   const tx = {
     from: relayerAddress,
@@ -78,7 +81,7 @@ export const getSignedTransaction = async (
     gasPrice: 3100,
     data: data,
     to: to,
-    value: value,
+    value: valueBigInt,
     chainId: (await provider.getNetwork()).chainId,
     type: 4,
     maxFeePerGas: 30000,
@@ -88,8 +91,8 @@ export const getSignedTransaction = async (
   };
 
   const encodedTx = serializeEip7702(tx, null);
-  const txHashToSign = ethers.utils.keccak256(encodedTx);
-  const signature = relayer.signDigest(txHashToSign);
+  const txHashToSign = ethers.keccak256(encodedTx);
+  const signature = relayer.sign(txHashToSign);
 
   return serializeEip7702(tx, signature);
 };
@@ -112,19 +115,20 @@ export const serializeEip7702 = (
   ];
 
   if (_sig) {
-    const sig = ethers.utils.splitSignature(_sig);
-    fields.push(formatNumber(sig.yParityAndS));
-    fields.push(ethers.utils.arrayify(sig.r));
-    fields.push(ethers.utils.arrayify(sig.s));
+    // In ethers v6, Signature object has r, s, v properties
+    const yParity = _sig.v - 27;
+    fields.push(formatNumber(yParity));
+    fields.push(ethers.getBytes(_sig.r));
+    fields.push(ethers.getBytes(_sig.s));
   }
 
-  return ethers.utils.hexConcat(["0x04", ethers.utils.RLP.encode(fields)]);
+  return ethers.concat(["0x04", ethers.encodeRlp(fields)]);
 };
 
 const formatAccessList = (
-  value: ethers.utils.AccessListish
+  value: ethers.AccessListish
 ): Array<[string, Array<string>]> => {
-  return ethers.utils
+  return ethers
     .accessListify(value)
     .map((set) => [set.address, set.storageKeys]);
 };
@@ -145,15 +149,15 @@ const formatAuthorizationEntry = (
     set.address,
     formatNumber(set.nonce),
     formatNumber(set.yParity),
-    ethers.utils.arrayify(set.r),
-    ethers.utils.arrayify(set.s),
+    ethers.getBytes(set.r),
+    ethers.getBytes(set.s),
   ];
 };
 
 export const ACCOUNT_CODE_PREFIX = "0xef0100";
 
 export const isAccountDelegatedToAddress = async (
-  provider: ethers.providers.Provider,
+  provider: ethers.Provider,
   account: string,
   authority: string
 ) => {
@@ -161,6 +165,6 @@ export const isAccountDelegatedToAddress = async (
   return (
     codeAtEOA.length === 48 &&
     codeAtEOA.startsWith(ACCOUNT_CODE_PREFIX) &&
-    ethers.utils.getAddress("0x" + codeAtEOA.slice(8)) === authority
+    ethers.getAddress("0x" + codeAtEOA.slice(8)) === authority
   );
 };

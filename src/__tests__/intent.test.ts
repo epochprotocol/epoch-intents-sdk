@@ -17,9 +17,9 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("EpochIntent", () => {
   let sdk: ReturnType<typeof EpochIntents>;
-  let mockSigner: ethers.Signer;
+  let mockSigner: ethers.Wallet;
   let mockWalletClient: WalletClient;
-  let relayerSigningKey: ethers.utils.SigningKey;
+  let relayerSigningKey: ethers.SigningKey;
   const chainId = 11155111;
 
   const mockTask: Task = {
@@ -59,11 +59,9 @@ describe("EpochIntent", () => {
       id: chainId as any,
     });
 
-    const provider = new ethers.providers.JsonRpcProvider(
-      RPC_ENDPOINTS[chainId]
-    );
+    const provider = new ethers.JsonRpcProvider(RPC_ENDPOINTS[chainId]);
     mockSigner = new ethers.Wallet(privateKey, provider);
-    relayerSigningKey = new ethers.utils.SigningKey(relayerPrivateKey);
+    relayerSigningKey = new ethers.SigningKey(relayerPrivateKey);
 
     mockWalletClient = createWalletClient({
       account: privateKeyToAccount(privateKey as `0x${string}`),

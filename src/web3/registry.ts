@@ -12,7 +12,7 @@ import { getEncodedIntent } from "./intents";
 import intentRegistryAbi from "./abis/intentRegistryAbi";
 
 export const getIntentRegistryInstance = (chainId: number) => {
-  const provider = new ethers.providers.JsonRpcProvider(RPC_ENDPOINTS[chainId]);
+  const provider = new ethers.JsonRpcProvider(RPC_ENDPOINTS[chainId]);
   return new ethers.Contract(
     INTENT_REGISTRY_ADDRESS[chainId],
     intentRegistryAbi,

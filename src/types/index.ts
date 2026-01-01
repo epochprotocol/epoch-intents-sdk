@@ -65,14 +65,14 @@ export enum WalletType {
 
 export type CreateWalletOptions = {
   is7702?: boolean;
-  userSigner?: ethers.VoidSigner | ethers.Signer | WalletClient;
+  userSigner?: ethers.Wallet | ethers.VoidSigner | WalletClient;
   passkey?: any;
 };
 
 export type AuthorizationListEntryAny = {
   chainId: number;
   address: string;
-  nonce: ethers.BigNumber;
+  nonce: bigint;
   yParity: any;
   r: any;
   s: any;
@@ -224,6 +224,7 @@ export type PathItem = {
   protocol?: Protocol;
   token?: Token & { amount: string };
   calldata?: CalldataReturnInterface;
+  fillerData?: FillerTokenData;
 };
 
 export type Path = PathItem[][][];
@@ -236,6 +237,7 @@ export interface QuoteReturnInterface {
   quoteId: string;
   quoteData: string;
   callData: CalldataReturnInterface;
+  fillerData?: FillerTokenData;
 }
 
 export interface ExecutionResult {
@@ -342,6 +344,13 @@ export type QueuedTransactionForIntent = {
   status: TransactionStatus;
   dependenciesTransactions: string[];
   transactionHash: string | null;
+};
+
+export type CompactDataForQueue = {
+  intentNonce: string;
+  fillerTokenDatas: FillerTokenData[];
+  claimHash: string;
+  chainId: string;
 };
 
 export enum QueueExecutionType {

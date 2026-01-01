@@ -63,9 +63,9 @@ export const EpochIntents = (config: Config) => {
       chainId: number,
       walletType: WalletType,
       relayer:
-        | ethers.utils.SigningKey
+        | ethers.SigningKey
+        | ethers.Wallet
         | ethers.VoidSigner
-        | ethers.Signer
         | WalletClient,
       options?: CreateWalletOptions
     ): Promise<string> => {
@@ -77,13 +77,13 @@ export const EpochIntents = (config: Config) => {
         }
         if (
           options.userSigner instanceof ethers.VoidSigner ||
-          options.userSigner instanceof ethers.Signer
+          options.userSigner instanceof ethers.Wallet
         ) {
           throw new Error(
             "User signer must be an WalletClient, ethers Signer not supported at the moment for 7702"
           );
         }
-        if (!(relayer instanceof ethers.utils.SigningKey)) {
+        if (!(relayer instanceof ethers.SigningKey)) {
           throw new Error(
             "Relayer must be an SigningKey, ethers Signer not supported at the moment for 7702"
           );
@@ -98,7 +98,7 @@ export const EpochIntents = (config: Config) => {
 
       if (!isAlreadyDeployed) {
         let relayerSigner = relayer;
-        if (relayer instanceof ethers.utils.SigningKey) {
+        if (relayer instanceof ethers.SigningKey) {
           relayerSigner = new ethers.Wallet(
             relayer.privateKey,
             getProvider(chainId)
@@ -106,7 +106,7 @@ export const EpochIntents = (config: Config) => {
         }
         await executeTransaction(
           txnData,
-          relayerSigner as ethers.Signer | ethers.VoidSigner | WalletClient
+          relayerSigner as ethers.Wallet | ethers.VoidSigner | WalletClient
         );
       }
 
@@ -117,7 +117,7 @@ export const EpochIntents = (config: Config) => {
           proxyAddress,
           initializerData,
           options.userSigner as WalletClient,
-          relayer as ethers.utils.SigningKey
+          relayer as ethers.SigningKey
         );
       }
 
@@ -258,7 +258,7 @@ export const EpochIntents = (config: Config) => {
      */
     signIntent: async (
       intent: Intent,
-      signer: ethers.VoidSigner | ethers.Signer | WalletClient,
+      signer: ethers.Wallet | ethers.VoidSigner | WalletClient,
       walletType?: WalletType
     ): Promise<string> => {
       if (!signer) {
@@ -270,13 +270,17 @@ export const EpochIntents = (config: Config) => {
 
         if (
           signer instanceof ethers.VoidSigner ||
-          signer instanceof ethers.Signer
+          signer instanceof ethers.Wallet
         ) {
           const signature = await signer.signMessage(message);
           return signature;
         } else if (walletType === WalletType.metamask) {
           const intentWalletAddress = intent.sender;
-          const is7702 = intentWalletAddress === signer.account?.address;
+          const account = signer.account;
+          if (!account) {
+            throw new Error("WalletClient account not found");
+          }
+          const is7702 = intentWalletAddress === account.address;
           const metamaskDelegator = await getMetamaskDelegatorInstance(
             intentWalletAddress as string,
             signer as WalletClient,

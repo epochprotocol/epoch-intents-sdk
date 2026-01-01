@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { Intent } from "../types";
 
 export const getEncodedIntent = (intent: Intent) => {
-  const abiCoder = new ethers.utils.AbiCoder();
+  const abiCoder = new ethers.AbiCoder();
   const intentParamsType = `tuple(
         address sender,
         tuple(address tokenAddress, address spenderAddress, uint256 amount, uint256 chainId)[] approvals,
@@ -15,16 +15,16 @@ export const getEncodedIntent = (intent: Intent) => {
         tuple(address target, uint256 value, bytes data)[] calldatas
       )`;
   const encodedIntent = abiCoder.encode([intentParamsType], [intent]);
-  return ethers.utils.arrayify(encodedIntent);
+  return ethers.getBytes(encodedIntent);
 };
 
 export const getIntentHash = (intent: Intent) => {
   const encodedIntent = getEncodedIntent(intent);
-  const messageHash = ethers.utils.keccak256(encodedIntent);
+  const messageHash = ethers.keccak256(encodedIntent);
   return messageHash;
 };
 
 export const getEIP191IntentHash = (intent: Intent) => {
   const encodedIntent = getEncodedIntent(intent);
-  return ethers.utils.hashMessage(encodedIntent);
+  return ethers.hashMessage(encodedIntent);
 };
