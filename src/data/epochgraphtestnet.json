@@ -6,14 +6,19 @@
         "Optimism": "0xAaveOptimismAddress",
         "Mainnet": "0xAaveSepoliaAddress"
       },
-      "type": ["lending", "yield"]
+      "type": [
+        "lending",
+        "yield"
+      ]
     },
     "raffles": {
       "contractAddress": {
         "Base": "0xAaveBaseAddress",
         "Mainnet": "0xAaveSepoliaAddress"
       },
-      "type": ["protocol-interaction"]
+      "type": [
+        "protocol-interaction"
+      ]
     },
     "dummy-lending": {
       "contractAddress": {
@@ -24,9 +29,13 @@
         "Sepolia": "0xMorphoSepoliaAddress",
         "Polygon": "0xMorphoPolygonAddress",
         "Tatara": "0xMorphoTataraAddress",
-        "Rise": "0xMorphoRiseAddress"
+        "Rise": "0xMorphoRiseAddress",
+        "Push": "0xMorphoRiseAddress"
       },
-      "type": ["lending", "yield"]
+      "type": [
+        "lending",
+        "yield"
+      ]
     },
     "dummy-staking": {
       "contractAddress": {
@@ -36,9 +45,13 @@
         "Base": "0xMorphoBaseAddress",
         "Polygon": "0xMorphoPolygonAddress",
         "Tatara": "0xMorphoTataraAddress",
-        "Rise": "0xMorphoRiseAddress"
+        "Rise": "0xMorphoRiseAddress",
+        "Push": "0xMorphoRiseAddress"
       },
-      "type": ["staking", "yield"]
+      "type": [
+        "staking",
+        "yield"
+      ]
     },
     "uniswap-v3": {
       "contractAddress": {
@@ -46,27 +59,36 @@
         "Optimism": "0xMorphoOptimismAddress",
         "Mainnet": "0xMorphoMainnetAddress",
         "Monad": "0xMorphoMonadAddress",
-        "Polygon": "0xMorphoPolygonAddress"
+        "Polygon": "0xMorphoPolygonAddress",
+        "Push": "0xMorphoPushAddress"
       },
-      "type": ["swap"]
+      "type": [
+        "swap"
+      ]
     },
     "FillerSwapAndBridge": {
       "contractAddress": {
         "*": "*"
       },
-      "type": ["swapandbridge"]
+      "type": [
+        "swapandbridge"
+      ]
     },
     "FillerSwap": {
       "contractAddress": {
         "*": "*"
       },
-      "type": ["swap"]
+      "type": [
+        "swap"
+      ]
     },
     "FillerCrossChain": {
       "contractAddress": {
         "*": "*"
       },
-      "type": ["bridge"]
+      "type": [
+        "bridge"
+      ]
     }
   },
   "tokens": {
@@ -78,7 +100,8 @@
         "Mainnet": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69",
         "Polygon": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69",
         "Tatara": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69",
-        "Rise": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69"
+        "Rise": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69",
+        "Push": "0x2BB4FfD7E2c6D432b697554Efd77fA13bdbefd69"
       },
       "decimals": 18
     },
@@ -90,7 +113,8 @@
         "Mainnet": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a",
         "Polygon": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a",
         "Tatara": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a",
-        "Rise": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a"
+        "Rise": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a",
+        "Push": "0xc30f1Ce05d1434d484E9A47283aA925fc8A8699a"
       },
       "decimals": 18
     },
@@ -102,7 +126,8 @@
         "Mainnet": "0xc04d2869665Be874881133943523723Be5782720",
         "Polygon": "0xc04d2869665Be874881133943523723Be5782720",
         "Tatara": "0xc04d2869665Be874881133943523723Be5782720",
-        "Rise": "0xc04d2869665Be874881133943523723Be5782720"
+        "Rise": "0xc04d2869665Be874881133943523723Be5782720",
+        "Push": "0xc04d2869665Be874881133943523723Be5782720"
       },
       "decimals": 18
     },
@@ -114,7 +139,8 @@
         "Mainnet": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A",
         "Polygon": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A",
         "Tatara": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A",
-        "Rise": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A"
+        "Rise": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A",
+        "Push": "0x7946dd86eE310D0aC16804A37787289Fa5b88A8A"
       },
       "decimals": 18
     },
@@ -126,7 +152,8 @@
         "Mainnet": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9",
         "Polygon": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9",
         "Tatara": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9",
-        "Rise": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9"
+        "Rise": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9",
+        "Push": "0x9b2a2754a9182fD65360E23afCDf3BeFF51796E9"
       },
       "decimals": 18
     },
@@ -138,7 +165,8 @@
         "Mainnet": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C",
         "Polygon": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C",
         "Tatara": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C",
-        "Rise": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C"
+        "Rise": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C",
+        "Push": "0xEA7dC9849206Ce73b11c465d37b85eC06B11Cf2C"
       },
       "decimals": 18
     },
@@ -150,7 +178,8 @@
         "Mainnet": "0xB588418c0f90F07Bc9587d0050845a90C23C7502",
         "Polygon": "0xB588418c0f90F07Bc9587d0050845a90C23C7502",
         "Tatara": "0xB588418c0f90F07Bc9587d0050845a90C23C7502",
-        "Rise": "0xB588418c0f90F07Bc9587d0050845a90C23C7502"
+        "Rise": "0xB588418c0f90F07Bc9587d0050845a90C23C7502",
+        "Push": "0xB588418c0f90F07Bc9587d0050845a90C23C7502"
       },
       "decimals": 18
     },
@@ -162,7 +191,8 @@
         "Mainnet": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD",
         "Polygon": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD",
         "Tatara": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD",
-        "Rise": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD"
+        "Rise": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD",
+        "Push": "0x512Ee6Bd7A4be5Ba4796F15Df080c4D0F89a38eD"
       },
       "decimals": 18
     },
@@ -174,7 +204,8 @@
         "Mainnet": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0",
         "Polygon": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0",
         "Tatara": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0",
-        "Rise": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0"
+        "Rise": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0",
+        "Push": "0x145e03A80c19ad1b9d0429d06b6d52707de724A0"
       },
       "decimals": 18
     }
@@ -207,6 +238,10 @@
     "Rise": {
       "chainId": 11155931,
       "explorer": "https://explorer.testnet.riselabs.xyz"
+    },
+    "Push": {
+      "chainId": 42101,
+      "explorer": "https://donut.push.network"
     }
   },
   "relationships": {
@@ -227,6 +262,20 @@
           "tokensOut": []
         },
         "Mainnet": {
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC",
+            "PENGU",
+            "OSWALD",
+            "KICK",
+            "FERB"
+          ],
+          "tokensOut": []
+        },
+        "Push": {
           "tokensIn": [
             "USDC",
             "USDT",
@@ -339,35 +388,101 @@
             "FERB"
           ],
           "tokensOut": []
+        },
+        "Push": {
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC",
+            "PENGU",
+            "OSWALD",
+            "KICK",
+            "FERB"
+          ],
+          "tokensOut": []
         }
       },
       "dummy-staking": {
         "Monad": {
-          "tokensIn": ["USDC", "USDT", "DAI", "WETH", "WBTC"],
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC"
+          ],
           "tokensOut": []
         },
         "Mainnet": {
-          "tokensIn": ["USDC", "USDT", "DAI", "WETH", "WBTC"],
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC"
+          ],
           "tokensOut": []
         },
         "Optimism": {
-          "tokensIn": ["USDC", "USDT", "DAI", "WETH", "WBTC"],
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC"
+          ],
           "tokensOut": []
         },
         "Base": {
-          "tokensIn": ["USDC", "USDT", "DAI", "WETH", "WBTC"],
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC"
+          ],
           "tokensOut": []
         },
         "Polygon": {
-          "tokensIn": ["USDC", "USDT", "DAI", "WETH", "WBTC"],
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC"
+          ],
           "tokensOut": []
         },
         "Tatara": {
-          "tokensIn": ["USDC", "USDT", "DAI", "WETH", "WBTC"],
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC"
+          ],
           "tokensOut": []
         },
         "Rise": {
-          "tokensIn": ["USDC", "USDT", "DAI", "WETH", "WBTC"],
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC"
+          ],
+          "tokensOut": []
+        },
+        "Push": {
+          "tokensIn": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC"
+          ],
           "tokensOut": []
         }
       },
@@ -436,21 +551,40 @@
             "KICK",
             "FERB"
           ]
+        },
+        "Push": {
+          "tokensInAndOut": [
+            "USDC",
+            "USDT",
+            "DAI",
+            "WETH",
+            "WBTC",
+            "PENGU",
+            "OSWALD",
+            "KICK",
+            "FERB"
+          ]
         }
       },
       "FillerCrossChain": {
         "*": {
-          "tokensInAndOut": ["*"]
+          "tokensInAndOut": [
+            "*"
+          ]
         }
       },
       "FillerSwap": {
         "*": {
-          "tokensInAndOut": ["*"]
+          "tokensInAndOut": [
+            "*"
+          ]
         }
       },
       "FillerSwapAndBridge": {
         "*": {
-          "tokensInAndOut": ["*"]
+          "tokensInAndOut": [
+            "*"
+          ]
         }
       }
     },
@@ -462,7 +596,8 @@
         "Monad",
         "Polygon",
         "Tatara",
-        "Rise"
+        "Rise",
+        "Push"
       ],
       "USDC": [
         "Base",
@@ -471,7 +606,8 @@
         "Monad",
         "Polygon",
         "Tatara",
-        "Rise"
+        "Rise",
+        "Push"
       ],
       "WETH": [
         "Base",
@@ -480,7 +616,8 @@
         "Monad",
         "Polygon",
         "Tatara",
-        "Rise"
+        "Rise",
+        "Push"
       ],
       "WBTC": [
         "Base",
@@ -489,7 +626,8 @@
         "Monad",
         "Polygon",
         "Tatara",
-        "Rise"
+        "Rise",
+        "Push"
       ],
       "PENGU": [
         "Base",
@@ -498,7 +636,8 @@
         "Monad",
         "Polygon",
         "Tatara",
-        "Rise"
+        "Rise",
+        "Push"
       ],
       "OSWALD": [
         "Base",
@@ -507,7 +646,8 @@
         "Monad",
         "Polygon",
         "Tatara",
-        "Rise"
+        "Rise",
+        "Push"
       ],
       "KICK": [
         "Base",
@@ -516,7 +656,8 @@
         "Monad",
         "Polygon",
         "Tatara",
-        "Rise"
+        "Rise",
+        "Push"
       ],
       "FERB": [
         "Base",
@@ -525,7 +666,8 @@
         "Monad",
         "Polygon",
         "Tatara",
-        "Rise"
+        "Rise",
+        "Push"
       ]
     }
   }
