@@ -1,4 +1,4 @@
-# Epoch Intent SDK
+# Epoch Intent SDK [Deprecated]
 
 A TypeScript SDK for interacting with the Epoch Intent protocol, providing utilities for blockchain interactions and API calls.
 
